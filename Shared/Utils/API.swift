@@ -1,5 +1,5 @@
 //
-//  Fetch.swift
+//  API.swift
 //  WellSleep
 //
 //  Created by Sketch on 2021/7/8.
@@ -8,7 +8,48 @@
 import Foundation
 import SwiftyJSON
 
-func fetchUser(id: Int, completion:@escaping (User?, Error?) -> Void) {
+func postCheck(id: Int, type: Activity._Type, completion: @escaping (Bool, Error?) -> Void) {
+    do {
+        var request = URLRequest(url: URL(string: String(format: WellSleepCheckURL, id))!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = [
+            "id": id,
+            "type": type.rawValue
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                completion(false, error)
+            } else {
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                guard (200...299).contains(status) else {
+                    completion(false, error)
+                    
+                    return
+                }
+                
+                if let json = try? JSON(data: data!) {
+                    let status = json["status"].intValue
+                    guard status >= 0 else {
+                        completion(false, error)
+                        
+                        return
+                    }
+                    
+                    completion(true, error)
+                } else {
+                    completion(false, error)
+                }
+            }
+        }
+        .resume()
+    }
+}
+
+func getUser(id: Int, completion: @escaping (User?, Error?) -> Void) {
     do {
         var request = URLRequest(url: URL(string: String(format: WellSleepUserURL, id))!)
         request.timeoutInterval = Timeout
@@ -45,7 +86,7 @@ func fetchUser(id: Int, completion:@escaping (User?, Error?) -> Void) {
     }
 }
 
-func fetchActivities(user: User, to: Int, limit: Int, completion:@escaping ([Activity]?, Error?) -> Void) {
+func getActivities(user: User, to: Int, limit: Int, completion: @escaping ([Activity]?, Error?) -> Void) {
     do {
         var request = URLRequest(url: URL(string: String(format: WellSleepActivitiesURL, user.id, to, limit))!)
         request.timeoutInterval = Timeout
@@ -87,7 +128,7 @@ func fetchActivities(user: User, to: Int, limit: Int, completion:@escaping ([Act
     }
 }
 
-func fetchFollowers(id: Int, completion:@escaping ([User]?, Error?) -> Void) {
+func getFollowers(id: Int, completion: @escaping ([User]?, Error?) -> Void) {
     do {
         var request = URLRequest(url: URL(string: String(format: WellSleepFollowersURL, id))!)
         request.timeoutInterval = Timeout
@@ -129,7 +170,7 @@ func fetchFollowers(id: Int, completion:@escaping ([User]?, Error?) -> Void) {
     }
 }
 
-func fetchTimeline(id: Int, to: Int, limit: Int, completion:@escaping ([Activity]?, [User]?, Error?) -> Void) {
+func getTimeline(id: Int, to: Int, limit: Int, completion: @escaping ([Activity]?, [User]?, Error?) -> Void) {
     do {
         var request = URLRequest(url: URL(string: String(format: WellSleepTimelineURL, id, to, limit))!)
         request.timeoutInterval = Timeout

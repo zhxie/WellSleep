@@ -19,7 +19,18 @@ struct ContentView: View {
                 Spacer()
                 
                 TabBarView(checkState: $modelData.checkState) {
+                    let checkState = modelData.checkState
+                    
                     modelData.checkState = .loading
+                    
+                    switch checkState {
+                    case .sleep:
+                        modelData.check(type: .sleep)
+                    case .wake:
+                        modelData.check(type: .wake)
+                    default:
+                        fatalError()
+                    }
                 }
                 
                 Spacer()

@@ -60,14 +60,14 @@ final class ModelData: ObservableObject {
     var isTimelineUpdating = false
     var isUsersUpdating = false
     
-    func updateTimeline(to: Int, limit: Int) {
+    func updateTimeline(to: Int) {
         if isTimelineUpdating || isUsersUpdating {
             return
         } else {
             isTimelineUpdating = true
             isUsersUpdating = true
             
-            fetchTimeline(id: id, to: to, limit: limit) { activities, users, error in
+            getTimeline(id: id, to: to, limit: Limit) { activities, users, error in
                 guard let activities = activities, let users = users else {
                     DispatchQueue.main.async {
                         self.isTimelineUpdating = false
@@ -81,7 +81,7 @@ final class ModelData: ObservableObject {
                     user.id == self.id
                 }!
                 
-                fetchActivities(user: _self, to: 0, limit: 1) { acts, error2 in
+                getActivities(user: _self, to: 0, limit: 1) { acts, error2 in
                     guard let acts = acts else {
                         DispatchQueue.main.async {
                             self.isTimelineUpdating = false
@@ -111,6 +111,40 @@ final class ModelData: ObservableObject {
                         self.isTimelineUpdating = false
                         self.isUsersUpdating = false
                     }
+                }
+            }
+        }
+    }
+    
+    func check(type: Activity._Type) {
+        if isTimelineUpdating || isUsersUpdating {
+            return
+        } else {
+            isTimelineUpdating = true
+            isUsersUpdating = true
+            
+            postCheck(id: id, type: type) { success, error in
+                guard success else {
+                    DispatchQueue.main.async {
+                        switch type {
+                        case .sleep:
+                            self.checkState = .sleep
+                        case .wake:
+                            self.checkState = .wake
+                        }
+                        
+                        self.isTimelineUpdating = false
+                        self.isUsersUpdating = false
+                    }
+                    
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.isTimelineUpdating = false
+                    self.isUsersUpdating = false
+                    
+                    self.updateTimeline(to: 0)
                 }
             }
         }
