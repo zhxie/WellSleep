@@ -19,7 +19,7 @@ struct ContentView: View {
                 Spacer()
                 
                 TabBarView(checkState: $modelData.checkState) {
-                    
+                    modelData.checkState = .loading
                 }
                 
                 Spacer()
