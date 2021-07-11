@@ -11,13 +11,13 @@ struct HomeView: View {
     @EnvironmentObject var modelData: ModelData
     
     var body: some View {
-        ScrollView {
+        ScrollView (showsIndicators: false) {
             ZStack {
                 HStack {
                     Spacer()
                 }
                 
-                VStack {
+                VStack (spacing: 12) {
                     ForEach (groupedActivities, id: \.self.first!.id) { activitiesGroup in
                         if activitiesGroup.first!.time.formatFullDate() != Date().formatFullDate() {
                             HStack {
@@ -42,10 +42,12 @@ struct HomeView: View {
                         }
                     }
                 }
+                .padding(.horizontal, 24)
+                .animation(.default)
             }
         }
         .onAppear(perform: {
-            modelData.updateTimeline(to: 0, limit: 100)
+            modelData.updateTimeline(to: 0)
         })
     }
     

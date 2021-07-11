@@ -44,6 +44,7 @@ struct TabBarView: View {
             ZStack {
                 Circle()
                     .foregroundColor(checkState.backgroundColor)
+                    .shadow(color: .black.opacity(0.15), radius: 4)
                 
                 if (checkState == .loading) {
                     ProgressView()

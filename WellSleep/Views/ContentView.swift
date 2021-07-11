@@ -13,7 +13,6 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             HomeView()
-                .padding(.horizontal)
             
             VStack {
                 Spacer()
