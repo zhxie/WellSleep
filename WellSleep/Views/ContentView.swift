@@ -12,30 +12,24 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            HomeView()
+            switch modelData.tab {
+            case .home:
+                HomeView()
+            case .friends:
+                EmptyView()
+            }
             
             VStack {
                 Spacer()
                 
-                TabBarView(checkState: $modelData.checkState) {
-                    let checkState = modelData.checkState
-                    
-                    modelData.checkState = .loading
-                    
-                    switch checkState {
-                    case .sleep:
-                        modelData.check(type: .sleep)
-                    case .wake:
-                        modelData.check(type: .wake)
-                    default:
-                        fatalError()
-                    }
-                }
+                TabBarView()
+                    .environmentObject(modelData)
                 
                 Spacer()
                     .frame(height: 24)
             }
         }
+        .animation(.easeInOut(duration: 0.2))
     }
 }
 

@@ -8,18 +8,9 @@
 import SwiftUI
 
 struct TabBarView: View {
-    @Binding var checkState: CheckState
+    @EnvironmentObject var modelData: ModelData
+    
     @GestureState var checkOnTapped = false
-    var onLongPressGesture: () -> Void = {}
-    
-    init(checkState: Binding<CheckState>) {
-        self._checkState = checkState
-    }
-    
-    init(checkState: Binding<CheckState>, onLongPressGesture action: @escaping () -> Void) {
-        self._checkState = checkState
-        self.onLongPressGesture = action
-    }
     
     var body: some View {
         let checkTap = LongPressGesture(minimumDuration: 2.0, maximumDistance: 38.4)
@@ -29,44 +20,103 @@ struct TabBarView: View {
             }
             .onEnded { value in
                 Impact(style: .medium)
-                onLongPressGesture()
+                
+                switch modelData.checkState {
+                case .sleep:
+                    modelData.check(type: .sleep)
+                case .wake:
+                    modelData.check(type: .wake)
+                default:
+                    fatalError()
+                }
             }
         
-        return ZStack {
+        return HStack {
             ZStack {
-                Sector(start: .degrees(-90), end: .degrees(checkOnTapped ? 270 : -90))
-                    .foregroundColor(Color(UIColor.secondarySystemBackground).opacity(0.75))
-                    .animation(checkOnTapped ? .linear(duration: 2.0) : .linear(duration: 0))
+                Circle()
+                    .foregroundColor(Tab.home.backgroundColor)
+                    .shadow(color: .black.opacity(0.15), radius: 2)
+                
+                Image(systemName: "house.fill")
+                    .font(.headline)
+                    .foregroundColor(modelData.tab == .home ? Tab.home.activeForegroundColor : Tab.home.inactiveForegroundColor)
+                    .animation(.easeInOut(duration: 0.2))
             }
-            .scaleEffect(checkOnTapped && checkState != .loading ? 1.8 : 1.0)
+            .frame(width: 40, height: 40)
             .animation(.easeInOut(duration: 0.2))
+            .onTapGesture {
+                modelData.tab = .home
+            }
+            
+            Spacer()
+                .frame(width: 16)
+            
+            ZStack {
+                ZStack {
+                    Sector(start: .degrees(-90), end: .degrees(checkOnTapped ? 270 : -90))
+                        .foregroundColor(Color(UIColor.secondarySystemBackground).opacity(0.75))
+                        .animation(checkOnTapped ? .linear(duration: 2.0) : .linear(duration: 0))
+                }
+                .scaleEffect(checkOnTapped && !isLoading ? 1.8 : 1.0)
+                .animation(.easeInOut(duration: 0.2))
+                
+                ZStack {
+                    Circle()
+                        .foregroundColor(modelData.checkState.backgroundColor)
+                        .shadow(color: .black.opacity(0.15), radius: 4)
+                    
+                    switch modelData.checkState {
+                    case .sleep, .wake:
+                        Image(systemName: modelData.checkState.systemName)
+                            .font(.title2)
+                            .foregroundColor(modelData.checkState.foregroundColor)
+                    case .loading:
+                        ProgressView()
+                            .scaleEffect(1.5)
+                    }
+                }
+                .scaleEffect(checkOnTapped && modelData.checkState != .loading ? 1.2 : 1.0)
+                .disabled(modelData.checkState == .loading)
+                .animation(.easeInOut(duration: 0.2))
+                .gesture(checkTap)
+            }
+            .frame(width: 64, height: 64)
+            
+            Spacer()
+                .frame(width: 16)
             
             ZStack {
                 Circle()
-                    .foregroundColor(checkState.backgroundColor)
-                    .shadow(color: .black.opacity(0.15), radius: 4)
+                    .foregroundColor(Tab.friends.backgroundColor)
+                    .shadow(color: .black.opacity(0.15), radius: 2)
                 
-                if (checkState == .loading) {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                } else {
-                    Image(systemName: checkState.systemName)
-                        .font(.system(size: 21))
-                        .foregroundColor(checkState.foregroundColor)
-                }
+                Image(systemName: "person.2.fill")
+                    .font(.headline)
+                    .foregroundColor(modelData.tab == .friends ? Tab.friends.activeForegroundColor : Tab.friends.inactiveForegroundColor)
             }
-            .scaleEffect(checkOnTapped && checkState != .loading ? 1.2 : 1.0)
-            .gesture(checkTap)
-            .disabled(checkState == .loading)
+            .frame(width: 40, height: 40)
             .animation(.easeInOut(duration: 0.2))
+            .onTapGesture {
+                modelData.tab = .friends
+            }
         }
-        .frame(width: 64, height: 64)
-        
+    }
+    
+    var isLoading: Bool {
+        switch modelData.checkState {
+        case .sleep, .wake:
+            return false
+        case .loading:
+            return true
+        }
     }
 }
 
 struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {
-        TabBarView(checkState: .constant(.sleep))
+        let modelData = ModelData()
+        
+        TabBarView()
+            .environmentObject(modelData)
     }
 }

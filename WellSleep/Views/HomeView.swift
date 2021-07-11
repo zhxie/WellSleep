@@ -15,6 +15,9 @@ struct HomeView: View {
             ZStack {
                 HStack {
                     Spacer()
+                    Text("")
+                        .hidden()
+                    Spacer()
                 }
                 
                 VStack (spacing: 12) {
