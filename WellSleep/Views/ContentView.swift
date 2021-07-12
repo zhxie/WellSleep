@@ -16,7 +16,7 @@ struct ContentView: View {
             case .home:
                 HomeView()
             case .friends:
-                EmptyView()
+                UsersView()
             }
             
             VStack {
@@ -29,7 +29,9 @@ struct ContentView: View {
                     .frame(height: 24)
             }
         }
-        .animation(.easeInOut(duration: 0.2))
+        .onAppear(perform: {
+            modelData.updateMe()
+        })
     }
 }
 

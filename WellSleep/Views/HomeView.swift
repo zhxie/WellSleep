@@ -20,7 +20,7 @@ struct HomeView: View {
                     Spacer()
                 }
                 
-                VStack (spacing: 12) {
+                VStack (alignment: .leading, spacing: 12) {
                     ForEach (groupedActivities, id: \.self.first!.id) { activitiesGroup in
                         if activitiesGroup.first!.time.formatFullDate() != Date().formatFullDate() {
                             HStack {

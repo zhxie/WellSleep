@@ -18,3 +18,4 @@ let Timeout = 60.0
 let Limit = 100
 
 let ActivityPlaceholder = Activity(id: 0, type: .sleep, user: User(id: 0, nickname: ""), time: Date(timeIntervalSinceNow: 0), weather: nil)
+let UserPlaceholder = User(id: 0, nickname: "")
