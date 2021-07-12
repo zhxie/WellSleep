@@ -6,5 +6,6 @@
   
 */
 
-"add_user" = "Add User";
+"add_a_friend" = "Add a Friend";
+"show_qr_code" = "Show QR Code";
 "friends" = "Friends";
