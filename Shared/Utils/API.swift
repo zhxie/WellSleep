@@ -203,14 +203,15 @@ func getTimeline(id: Int, to: Int, limit: Int, completion: @escaping ([Activity]
                     for user in usersJSON {
                         users.append(parseUser(user: user))
                     }
-                    users.append(parseUser(user: json))
-                    let usersDict = users.reduce([Int: User]()) { (dict, user) -> [Int: User] in
+                    var usersDict = users.reduce([Int: User]()) { (dict, user) -> [Int: User] in
                         var dict = dict
                         
                         dict[user.id] = user
                         
                         return dict
                     }
+                    let me = parseUser(user: json)
+                    usersDict[me.id] = me
                     
                     // Activities
                     let activitiesJSON = json["timeline"].arrayValue

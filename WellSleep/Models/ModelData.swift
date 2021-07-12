@@ -67,20 +67,6 @@ enum CheckState {
 final class ModelData: ObservableObject {
     @Published var tab: Tab = .home
     @Published var checkState: CheckState = .sleep
-    func lock() -> CheckState? {
-        if self.checkState == .loading {
-            return nil
-        }
-        
-        let checkState = self.checkState
-        
-        if self.checkState == .loading {
-            return nil
-        }
-        
-        self.checkState = .loading
-        return checkState
-    }
     
     @Published var lastUpdate = Date(timeIntervalSince1970: 0)
     
@@ -88,53 +74,130 @@ final class ModelData: ObservableObject {
     @Published var users: [User] = []
     @Published var me = User(id: 992319501, nickname: "")
     
-    func updateFriends() {
-        guard let checkState = lock() else {
+    var isChecking = false
+    var isActivitiesUpdating = false
+    var isUsersUpdating = false
+    var isMeUpdating = false
+    
+    func updateMe() {
+        if isMeUpdating {
             return
-        }
-        
-        getFollowers(id: me.id) { users, error in
-            guard let users = users else {
-                DispatchQueue.main.async {
-                    self.checkState = checkState
+        } else {
+            isMeUpdating = true
+            
+            getUser(id: me.id) { user, error in
+                guard let user = user else {
+                    DispatchQueue.main.async {
+                        self.isMeUpdating = false
+                    }
+                    
+                    return
                 }
                 
-                return
+                DispatchQueue.main.async {
+                    self.me = user
+                    
+                    self.isMeUpdating = false
+                }
             }
+        }
+    }
+    
+    func updateFriends() {
+        if isUsersUpdating {
+            return
+        } else {
+            isUsersUpdating = true
             
-            DispatchQueue.main.async {
-                self.users = users
+            getFollowers(id: me.id) { users, error in
+                guard let users = users else {
+                    DispatchQueue.main.async {
+                        self.isUsersUpdating = false
+                    }
+                    
+                    return
+                }
                 
-                self.checkState = checkState
+                DispatchQueue.main.async {
+                    self.users = users
+                    
+                    self.isUsersUpdating = false
+                }
             }
         }
     }
     
     func updateTimeline(to: Int) {
-        guard let checkState = lock() else {
+        if isChecking || isActivitiesUpdating || isUsersUpdating {
             return
-        }
-        
-        var currentUpdate = lastUpdate
-        if let activity = activities.first {
-            currentUpdate = activity.time
-        }
-        
-        getTimeline(id: me.id, to: to, limit: Limit) { activities, users, error in
-            guard let activities = activities, let users = users else {
-                DispatchQueue.main.async {
-                    self.checkState = checkState
-                }
-                
-                return
+        } else {
+            isActivitiesUpdating = true
+            isUsersUpdating = true
+            
+            var currentUpdate = lastUpdate
+            if let activity = activities.first {
+                currentUpdate = activity.time
             }
             
-            let me = users.first { user in
-                user.id == self.me.id
-            }!
+            getTimeline(id: me.id, to: to, limit: Limit) { activities, users, error in
+                guard let activities = activities, let users = users else {
+                    DispatchQueue.main.async {
+                        self.isActivitiesUpdating = false
+                        self.isUsersUpdating = false
+                    }
+                    
+                    return
+                }
+                
+                getActivities(user: self.me, to: 0, limit: 1) { acts, error2 in
+                    guard let acts = acts else {
+                        DispatchQueue.main.async {
+                            self.isActivitiesUpdating = false
+                            self.isUsersUpdating = false
+                        }
+                        
+                        return
+                    }
+                    
+                    var nextCheckState: CheckState
+                    if acts.isEmpty {
+                        nextCheckState = .sleep
+                    } else {
+                        switch acts.first!.type {
+                        case .sleep:
+                            nextCheckState = .wake
+                        case .wake:
+                            nextCheckState = .sleep
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        if !self.isChecking {
+                            self.checkState = nextCheckState
+                        }
+                        self.lastUpdate = currentUpdate
+                        self.activities = activities
+                        self.users = users
+                        
+                        self.isActivitiesUpdating = false
+                        self.isUsersUpdating = false
+                    }
+                }
+            }
+        }
+    }
+    
+    func check(type: Activity._Type) {
+        if isChecking {
+            return
+        } else {
+            isChecking = true
             
-            getActivities(user: me, to: 0, limit: 1) { acts, error2 in
-                guard let acts = acts else {
+            let checkState = self.checkState
+            self.checkState = .loading
+            
+            postCheck(id: me.id, type: type) { success, error in
+                guard success else {
                     DispatchQueue.main.async {
                         self.checkState = checkState
                     }
@@ -142,48 +205,11 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                var nextCheckState: CheckState
-                if acts.isEmpty {
-                    nextCheckState = .sleep
-                } else {
-                    switch acts.first!.type {
-                    case .sleep:
-                        nextCheckState = .wake
-                    case .wake:
-                        nextCheckState = .sleep
-                    }
-                }
-                
                 DispatchQueue.main.async {
-                    self.lastUpdate = currentUpdate
-                    self.activities = activities
-                    self.users = users
-                    self.me = me
+                    self.isChecking = false
                     
-                    self.checkState = nextCheckState
+                    self.updateTimeline(to: 0)
                 }
-            }
-        }
-    }
-    
-    func check(type: Activity._Type) {
-        guard let checkState = lock() else {
-            return
-        }
-        
-        postCheck(id: me.id, type: type) { success, error in
-            guard success else {
-                DispatchQueue.main.async {
-                    self.checkState = checkState
-                }
-                
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.checkState = checkState
-                
-                self.updateTimeline(to: 0)
             }
         }
     }
