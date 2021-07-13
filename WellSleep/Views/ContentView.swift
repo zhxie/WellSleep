@@ -12,11 +12,11 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            switch modelData.tab {
-            case .home:
+            ZStack {
                 HomeView()
-            case .friends:
+                    .hidden(modelData.tab != .home)
                 UsersView()
+                    .hidden(modelData.tab != .friends)
             }
             
             VStack {
@@ -29,9 +29,6 @@ struct ContentView: View {
                     .frame(height: 24)
             }
         }
-        .onAppear(perform: {
-            modelData.updateMe()
-        })
     }
 }
 

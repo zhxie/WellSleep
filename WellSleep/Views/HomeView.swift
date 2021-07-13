@@ -10,6 +10,11 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var modelData: ModelData
     
+    init() {
+        modelData.updateMe()
+        modelData.updateTimeline(to: 100)
+    }
+    
     var body: some View {
         ScrollView (showsIndicators: false) {
             ZStack {
