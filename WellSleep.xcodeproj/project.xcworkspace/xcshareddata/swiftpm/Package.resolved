@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "CodeScanner",
+        "repositoryURL": "https://github.com/twostraws/CodeScanner",
+        "state": {
+          "branch": "main",
+          "revision": "3374c5b6755b3a9dfe77b87d975d3aa3db6d691f",
+          "version": null
+        }
+      },
+      {
         "package": "SwiftyJSON",
         "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
         "state": {

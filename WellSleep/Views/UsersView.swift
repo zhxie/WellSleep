@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import CodeScanner
 
 struct UsersView: View {
     @EnvironmentObject var modelData: ModelData
-    @State var showCode = false
+    @State var isShowingScanner = false
+    @State var isShowingCode = false
+    
+    init() {
+        modelData.updateFriends()
+    }
     
     var body: some View {
         ZStack {
@@ -25,16 +31,22 @@ struct UsersView: View {
                     VStack (spacing: 12) {
                         UserView(user: modelData.me)
                         AddUserView()
-                        ShowUserCodeView()
                             .onTapGesture {
-                                if !showCode {
+                                if !isShowingScanner {
+                                    Impact(style: .light)
+                                    isShowingScanner = true
+                                }
+                            }
+                        ShowCodeView()
+                            .onTapGesture {
+                                if !isShowingCode {
                                     Impact(style: .light)
                                     withAnimation {
-                                        showCode = true
+                                        isShowingCode = true
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                         withAnimation {
-                                            showCode = false
+                                            isShowingCode = false
                                         }
                                     }
                                 }
@@ -65,14 +77,30 @@ struct UsersView: View {
                 }
             }
             
-            if showCode {
+            if isShowingCode {
                 CodeView(id: modelData.me.id)
                     .transition(.opacity)
             }
         }
+        .sheet(isPresented: $isShowingScanner) {
+            CodeScannerView(codeTypes: [.qr], completion: handleScan)
+        }
         .onAppear(perform: {
             modelData.updateFriends()
         })
+    }
+    
+    func handleScan(result: Result<String, CodeScannerView.ScanError>) {
+        isShowingScanner = false
+        
+        switch result {
+        case .success(let result):
+            if let id = Int(result) {
+                modelData.addFriend(id: id)
+            }
+        case .failure(_):
+            return
+        }
     }
 }
 

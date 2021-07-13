@@ -75,6 +75,7 @@ final class ModelData: ObservableObject {
     @Published var me = User(id: 992319501, nickname: "")
     
     var isChecking = false
+    var isAddingFriend = false
     var isActivitiesUpdating = false
     var isUsersUpdating = false
     var isMeUpdating = false
@@ -104,7 +105,7 @@ final class ModelData: ObservableObject {
     }
     
     func updateFriends() {
-        if isUsersUpdating {
+        if isAddingFriend || isUsersUpdating {
             return
         } else {
             isUsersUpdating = true
@@ -128,22 +129,20 @@ final class ModelData: ObservableObject {
     }
     
     func updateTimeline(to: Int) {
-        if isChecking || isActivitiesUpdating || isUsersUpdating {
+        if isChecking || isActivitiesUpdating {
             return
         } else {
             isActivitiesUpdating = true
-            isUsersUpdating = true
             
             var currentUpdate = lastUpdate
             if let activity = activities.first {
                 currentUpdate = activity.time
             }
             
-            getTimeline(id: me.id, to: to, limit: Limit) { activities, users, error in
-                guard let activities = activities, let users = users else {
+            getTimeline(id: me.id, to: to, limit: Limit) { activities, _, error in
+                guard let activities = activities else {
                     DispatchQueue.main.async {
                         self.isActivitiesUpdating = false
-                        self.isUsersUpdating = false
                     }
                     
                     return
@@ -153,7 +152,6 @@ final class ModelData: ObservableObject {
                     guard let acts = acts else {
                         DispatchQueue.main.async {
                             self.isActivitiesUpdating = false
-                            self.isUsersUpdating = false
                         }
                         
                         return
@@ -177,7 +175,6 @@ final class ModelData: ObservableObject {
                         }
                         self.lastUpdate = currentUpdate
                         self.activities = activities
-                        self.users = users
                         
                         self.isActivitiesUpdating = false
                         self.isUsersUpdating = false
@@ -209,6 +206,26 @@ final class ModelData: ObservableObject {
                     self.isChecking = false
                     
                     self.updateTimeline(to: 0)
+                }
+            }
+        }
+    }
+    
+    func addFriend(id: Int) {
+        if isAddingFriend {
+            return
+        } else {
+            isAddingFriend = true
+            
+            postFollow(id: me.id, followee: id) { success, error in
+                guard success else {
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.isAddingFriend = false
+                    
+                    self.updateFriends()
                 }
             }
         }

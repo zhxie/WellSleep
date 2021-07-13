@@ -14,7 +14,7 @@
 		E410EFD9269B56A1009426D7 /* AddUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E410EFD8269B56A1009426D7 /* AddUserView.swift */; };
 		E410EFDB269B5963009426D7 /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E410EFDA269B5963009426D7 /* UsersView.swift */; };
 		E410EFDE269C7B64009426D7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E410EFE0269C7B64009426D7 /* Localizable.strings */; };
-		E410EFE2269C7CB1009426D7 /* ShowUserCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E410EFE1269C7CB1009426D7 /* ShowUserCodeView.swift */; };
+		E410EFE2269C7CB1009426D7 /* ShowCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E410EFE1269C7CB1009426D7 /* ShowCodeView.swift */; };
 		E410EFE4269C82C4009426D7 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E410EFE3269C82C4009426D7 /* CodeView.swift */; };
 		E410EFE6269C91A8009426D7 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E410EFE5269C91A8009426D7 /* UIImage.swift */; };
 		E42A53AD2680C40B00B1E13D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42A53AC2680C40B00B1E13D /* User.swift */; };
@@ -28,7 +28,9 @@
 		E43747A62680B6F700F7AFCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43747922680B6F600F7AFCD /* ContentView.swift */; };
 		E43747A82680B6F700F7AFCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E43747932680B6F700F7AFCD /* Assets.xcassets */; };
 		E43747B72680B86400F7AFCD /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E43747B62680B86400F7AFCD /* SwiftyJSON */; };
+		E4453489269DD2B80027C145 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4453488269DD2B80027C145 /* View.swift */; };
 		E4571B762680CE2400496F21 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4571B752680CE2400496F21 /* Date.swift */; };
+		E45C0DDF269CA64100974974 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = E45C0DDE269CA64100974974 /* CodeScanner */; };
 		E49C34C62693447100CA21BC /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49C34C52693447100CA21BC /* TabBarView.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +42,7 @@
 		E410EFD8269B56A1009426D7 /* AddUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserView.swift; sourceTree = "<group>"; };
 		E410EFDA269B5963009426D7 /* UsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
 		E410EFDF269C7B64009426D7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		E410EFE1269C7CB1009426D7 /* ShowUserCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowUserCodeView.swift; sourceTree = "<group>"; };
+		E410EFE1269C7CB1009426D7 /* ShowCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCodeView.swift; sourceTree = "<group>"; };
 		E410EFE3269C82C4009426D7 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
 		E410EFE5269C91A8009426D7 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		E41872942680C1960046F949 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 		E43747932680B6F700F7AFCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E43747982680B6F700F7AFCD /* WellSleep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WellSleep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E437479B2680B6F700F7AFCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4453488269DD2B80027C145 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		E4571B752680CE2400496F21 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		E49C34C52693447100CA21BC /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E45C0DDF269CA64100974974 /* CodeScanner in Frameworks */,
 				E43747B72680B86400F7AFCD /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -103,6 +107,7 @@
 				E437479A2680B6F700F7AFCD /* WellSleep */,
 				E43747992680B6F700F7AFCD /* Products */,
 				E41872942680C1960046F949 /* README.md */,
+				E45C0DDD269CA64100974974 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -145,7 +150,7 @@
 				E4340141268F679B00ABD171 /* HomeView.swift */,
 				E410EFD6269B555B009426D7 /* UserView.swift */,
 				E410EFD8269B56A1009426D7 /* AddUserView.swift */,
-				E410EFE1269C7CB1009426D7 /* ShowUserCodeView.swift */,
+				E410EFE1269C7CB1009426D7 /* ShowCodeView.swift */,
 				E410EFE3269C82C4009426D7 /* CodeView.swift */,
 				E410EFDA269B5963009426D7 /* UsersView.swift */,
 				E49C34C52693447100CA21BC /* TabBarView.swift */,
@@ -161,6 +166,7 @@
 				E4571B752680CE2400496F21 /* Date.swift */,
 				E410EFD42698B7AF009426D7 /* Shape.swift */,
 				E410EFE5269C91A8009426D7 /* UIImage.swift */,
+				E4453488269DD2B80027C145 /* View.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -173,6 +179,13 @@
 				E42A53AC2680C40B00B1E13D /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		E45C0DDD269CA64100974974 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +206,7 @@
 			name = WellSleep;
 			packageProductDependencies = (
 				E43747B62680B86400F7AFCD /* SwiftyJSON */,
+				E45C0DDE269CA64100974974 /* CodeScanner */,
 			);
 			productName = "WellSleep (iOS)";
 			productReference = E43747982680B6F700F7AFCD /* WellSleep.app */;
@@ -223,6 +237,7 @@
 			mainGroup = E437478B2680B6F600F7AFCD;
 			packageReferences = (
 				E43747B52680B86400F7AFCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				E45C0DDA269CA20100974974 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = E43747992680B6F700F7AFCD /* Products */;
 			projectDirPath = "";
@@ -254,7 +269,7 @@
 				E410EFD126975726009426D7 /* API.swift in Sources */,
 				E4340142268F679B00ABD171 /* HomeView.swift in Sources */,
 				E410EFD9269B56A1009426D7 /* AddUserView.swift in Sources */,
-				E410EFE2269C7CB1009426D7 /* ShowUserCodeView.swift in Sources */,
+				E410EFE2269C7CB1009426D7 /* ShowCodeView.swift in Sources */,
 				E42A53B92680CBDE00B1E13D /* Constant.swift in Sources */,
 				E43747A62680B6F700F7AFCD /* ContentView.swift in Sources */,
 				E410EFCF2697489E009426D7 /* Impact.swift in Sources */,
@@ -263,6 +278,7 @@
 				E410EFE4269C82C4009426D7 /* CodeView.swift in Sources */,
 				E410EFD52698B7AF009426D7 /* Shape.swift in Sources */,
 				E4571B762680CE2400496F21 /* Date.swift in Sources */,
+				E4453489269DD2B80027C145 /* View.swift in Sources */,
 				E42A53B32680CB1B00B1E13D /* ModelData.swift in Sources */,
 				E42A53AF2680C50D00B1E13D /* Activity.swift in Sources */,
 				E42A53AD2680C40B00B1E13D /* User.swift in Sources */,
@@ -479,6 +495,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		E45C0DDA269CA20100974974 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -486,6 +510,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E43747B52680B86400F7AFCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		E45C0DDE269CA64100974974 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E45C0DDA269CA20100974974 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

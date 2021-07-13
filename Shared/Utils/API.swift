@@ -8,14 +8,179 @@
 import Foundation
 import SwiftyJSON
 
+func postRegister(nickname: String, completion: @escaping (Int?, Error?) -> Void) {
+    do {
+        var request = URLRequest(url: URL(string: WellSleepRegisterURL)!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = [
+            "nickname": nickname
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                completion(nil, error)
+            } else {
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                guard (200...299).contains(status) else {
+                    completion(nil, error)
+                    
+                    return
+                }
+                
+                if let json = try? JSON(data: data!) {
+                    let status = json["status"].intValue
+                    guard status >= 0 else {
+                        completion(nil, error)
+                        
+                        return
+                    }
+                    
+                    let id = json["id"].intValue
+                    
+                    completion(id, error)
+                } else {
+                    completion(nil, error)
+                }
+            }
+        }
+        .resume()
+    }
+}
+
+func postUpdateProfile(id: Int, nickname: String, completion: @escaping (Bool, Error?) -> Void) {
+    do {
+        var request = URLRequest(url: URL(string: WellSleepUpdateProfileURL)!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = [
+            "id": id,
+            "nickname": nickname
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                completion(false, error)
+            } else {
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                guard (200...299).contains(status) else {
+                    completion(false, error)
+                    
+                    return
+                }
+                
+                if let json = try? JSON(data: data!) {
+                    let status = json["status"].intValue
+                    guard status >= 0 else {
+                        completion(false, error)
+                        
+                        return
+                    }
+                    
+                    completion(true, error)
+                } else {
+                    completion(false, error)
+                }
+            }
+        }
+        .resume()
+    }
+}
+
 func postCheck(id: Int, type: Activity._Type, completion: @escaping (Bool, Error?) -> Void) {
     do {
-        var request = URLRequest(url: URL(string: String(format: WellSleepCheckURL, id))!)
+        var request = URLRequest(url: URL(string: WellSleepCheckURL)!)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let parameters: [String: Any] = [
             "id": id,
             "type": type.rawValue
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                completion(false, error)
+            } else {
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                guard (200...299).contains(status) else {
+                    completion(false, error)
+                    
+                    return
+                }
+                
+                if let json = try? JSON(data: data!) {
+                    let status = json["status"].intValue
+                    guard status >= 0 else {
+                        completion(false, error)
+                        
+                        return
+                    }
+                    
+                    completion(true, error)
+                } else {
+                    completion(false, error)
+                }
+            }
+        }
+        .resume()
+    }
+}
+
+func postFollow(id: Int, followee: Int, completion: @escaping (Bool, Error?) -> Void) {
+    do {
+        var request = URLRequest(url: URL(string: WellSleepFollowURL)!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = [
+            "id": id,
+            "followee": followee
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                completion(false, error)
+            } else {
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                guard (200...299).contains(status) else {
+                    completion(false, error)
+                    
+                    return
+                }
+                
+                if let json = try? JSON(data: data!) {
+                    let status = json["status"].intValue
+                    guard status >= 0 else {
+                        completion(false, error)
+                        
+                        return
+                    }
+                    
+                    completion(true, error)
+                } else {
+                    completion(false, error)
+                }
+            }
+        }
+        .resume()
+    }
+}
+
+func postUnfollow(id: Int, followee: Int, completion: @escaping (Bool, Error?) -> Void) {
+    do {
+        var request = URLRequest(url: URL(string: WellSleepUnfollowURL)!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = [
+            "id": id,
+            "followee": followee
         ]
         request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
         

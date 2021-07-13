@@ -45,6 +45,7 @@ struct TabBarView: View {
             .frame(width: 40, height: 40)
             .animation(.easeInOut(duration: 0.2))
             .onTapGesture {
+                Impact(style: .light)
                 modelData.tab = .home
             }
             
@@ -97,6 +98,7 @@ struct TabBarView: View {
             .frame(width: 40, height: 40)
             .animation(.easeInOut(duration: 0.2))
             .onTapGesture {
+                Impact(style: .light)
                 modelData.tab = .friends
             }
         }

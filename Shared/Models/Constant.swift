@@ -8,7 +8,11 @@
 import Foundation
 
 let WellSleepURL = "http://sketch.name.:9355"
+let WellSleepRegisterURL = WellSleepURL + "/register"
+let WellSleepUpdateProfileURL = WellSleepURL + "/update_profile"
 let WellSleepCheckURL = WellSleepURL + "/check"
+let WellSleepFollowURL = WellSleepURL + "/follow"
+let WellSleepUnfollowURL = WellSleepURL + "/unfollow"
 let WellSleepUserURL = WellSleepURL + "/user?id=%d"
 let WellSleepActivitiesURL = WellSleepURL + "/activities?id=%d&to=%d&limit=%d"
 let WellSleepFollowersURL = WellSleepURL + "/followers?id=%d"

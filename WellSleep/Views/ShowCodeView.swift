@@ -1,5 +1,5 @@
 //
-//  ShowUserCodeView.swift
+//  ShowCodeView.swift
 //  WellSleep
 //
 //  Created by Sketch on 2021/7/12.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ShowUserCodeView: View {
+struct ShowCodeView: View {
     var body: some View {
         HStack {
             ZStack {
@@ -33,6 +33,6 @@ struct ShowUserCodeView: View {
 
 struct ShowUserCodeView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowUserCodeView()
+        ShowCodeView()
     }
 }
