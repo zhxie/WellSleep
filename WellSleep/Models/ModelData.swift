@@ -186,7 +186,6 @@ final class ModelData: ObservableObject {
     }
     
     func appendTimeline() {
-        print("A")
         if isChecking || isActivitiesUpdating {
             return
         } else {

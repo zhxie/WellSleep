@@ -146,14 +146,9 @@
 		E43747B22680B7D500F7AFCD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E42A53B62680CB9B00B1E13D /* ActivityView.swift */,
+				E445348A269DF2F00027C145 /* Components */,
 				E4340141268F679B00ABD171 /* HomeView.swift */,
-				E410EFD6269B555B009426D7 /* UserView.swift */,
-				E410EFD8269B56A1009426D7 /* AddUserView.swift */,
-				E410EFE1269C7CB1009426D7 /* ShowCodeView.swift */,
-				E410EFE3269C82C4009426D7 /* CodeView.swift */,
 				E410EFDA269B5963009426D7 /* UsersView.swift */,
-				E49C34C52693447100CA21BC /* TabBarView.swift */,
 				E43747922680B6F600F7AFCD /* ContentView.swift */,
 			);
 			path = Views;
@@ -179,6 +174,19 @@
 				E42A53AC2680C40B00B1E13D /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		E445348A269DF2F00027C145 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E42A53B62680CB9B00B1E13D /* ActivityView.swift */,
+				E410EFD6269B555B009426D7 /* UserView.swift */,
+				E410EFD8269B56A1009426D7 /* AddUserView.swift */,
+				E410EFE1269C7CB1009426D7 /* ShowCodeView.swift */,
+				E410EFE3269C82C4009426D7 /* CodeView.swift */,
+				E49C34C52693447100CA21BC /* TabBarView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		E45C0DDD269CA64100974974 /* Frameworks */ = {
