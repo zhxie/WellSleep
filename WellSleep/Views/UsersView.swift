@@ -13,10 +13,6 @@ struct UsersView: View {
     @State var isShowingScanner = false
     @State var isShowingCode = false
     
-    init() {
-        modelData.updateFriends()
-    }
-    
     var body: some View {
         ZStack {
             ScrollView (showsIndicators: false) {
@@ -28,7 +24,7 @@ struct UsersView: View {
                         Spacer()
                     }
                     
-                    VStack (spacing: 12) {
+                    LazyVStack (spacing: 12) {
                         UserView(user: modelData.me)
                         AddUserView()
                             .onTapGesture {
@@ -85,9 +81,9 @@ struct UsersView: View {
         .sheet(isPresented: $isShowingScanner) {
             CodeScannerView(codeTypes: [.qr], completion: handleScan)
         }
-        .onAppear(perform: {
+        .onAppear {
             modelData.updateFriends()
-        })
+        }
     }
     
     func handleScan(result: Result<String, CodeScannerView.ScanError>) {

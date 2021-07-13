@@ -71,6 +71,7 @@ final class ModelData: ObservableObject {
     @Published var lastUpdate = Date(timeIntervalSince1970: 0)
     
     @Published var activities: [Activity] = []
+    @Published var oldestActivityId: Int = 0
     @Published var users: [User] = []
     @Published var me = User(id: 992319501, nickname: "")
     
@@ -128,7 +129,7 @@ final class ModelData: ObservableObject {
         }
     }
     
-    func updateTimeline(to: Int) {
+    func updateTimeline() {
         if isChecking || isActivitiesUpdating {
             return
         } else {
@@ -139,7 +140,7 @@ final class ModelData: ObservableObject {
                 currentUpdate = activity.time
             }
             
-            getTimeline(id: me.id, to: to, limit: Limit) { activities, _, error in
+            getTimeline(id: me.id, to: 0, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
                     DispatchQueue.main.async {
                         self.isActivitiesUpdating = false
@@ -175,10 +176,37 @@ final class ModelData: ObservableObject {
                         }
                         self.lastUpdate = currentUpdate
                         self.activities = activities
+                        self.oldestActivityId = activities.last?.id ?? 0
                         
                         self.isActivitiesUpdating = false
-                        self.isUsersUpdating = false
                     }
+                }
+            }
+        }
+    }
+    
+    func appendTimeline() {
+        print("A")
+        if isChecking || isActivitiesUpdating {
+            return
+        } else {
+            isActivitiesUpdating = true
+        
+            getTimeline(id: me.id, to: oldestActivityId, limit: Limit) { activities, _, error in
+                guard let activities = activities else {
+                    DispatchQueue.main.async {
+                        self.isActivitiesUpdating = false
+                    }
+                    
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    // TODO
+                    self.activities.append(contentsOf: activities)
+                    self.oldestActivityId = activities.last?.id ?? 0
+                    
+                    self.isActivitiesUpdating = false
                 }
             }
         }
@@ -205,7 +233,7 @@ final class ModelData: ObservableObject {
                 DispatchQueue.main.async {
                     self.isChecking = false
                     
-                    self.updateTimeline(to: 0)
+                    self.updateTimeline()
                 }
             }
         }

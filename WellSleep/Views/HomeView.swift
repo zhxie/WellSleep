@@ -10,11 +10,6 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var modelData: ModelData
     
-    init() {
-        modelData.updateMe()
-        modelData.updateTimeline(to: 100)
-    }
-    
     var body: some View {
         ScrollView (showsIndicators: false) {
             ZStack {
@@ -25,7 +20,7 @@ struct HomeView: View {
                     Spacer()
                 }
                 
-                VStack (alignment: .leading, spacing: 12) {
+                LazyVStack (alignment: .leading, spacing: 12) {
                     ForEach (groupedActivities, id: \.self.first!.id) { activitiesGroup in
                         if activitiesGroup.first!.time.formatFullDate() != Date().formatFullDate() {
                             HStack {
@@ -47,6 +42,13 @@ struct HomeView: View {
                         
                         ForEach (activitiesGroup, id: \.self.id) { activity in
                             ActivityView(activity: activity, lastUpdate: modelData.lastUpdate)
+                                .onAppear {
+                                    guard activity.id == modelData.oldestActivityId else {
+                                        return
+                                    }
+                                    
+                                    modelData.appendTimeline()
+                                }
                         }
                     }
                 }
@@ -54,9 +56,10 @@ struct HomeView: View {
                 .animation(.default)
             }
         }
-        .onAppear(perform: {
-            modelData.updateTimeline(to: 0)
-        })
+        .onAppear {
+            modelData.updateMe()
+            modelData.updateTimeline()
+        }
     }
     
     var groupedActivities: [[Activity]] {
