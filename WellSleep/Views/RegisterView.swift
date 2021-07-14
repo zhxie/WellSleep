@@ -91,7 +91,7 @@ struct RegisterView: View {
             Spacer()
         }
         .background(Color.background)
-        .ignoresSafeArea()
+        .ignoresSafeArea(.container)
     }
 }
 
