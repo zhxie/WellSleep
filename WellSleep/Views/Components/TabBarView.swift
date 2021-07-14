@@ -34,12 +34,12 @@ struct TabBarView: View {
         return HStack {
             ZStack {
                 Circle()
-                    .foregroundColor(Tab.home.backgroundColor)
+                    .foregroundColor(.background)
                     .shadow(color: .black.opacity(0.15), radius: 2)
                 
                 Image(systemName: "house.fill")
                     .font(.headline)
-                    .foregroundColor(modelData.tab == .home ? Tab.home.activeForegroundColor : Tab.home.inactiveForegroundColor)
+                    .foregroundColor(modelData.tab == .home ? .accentColor : Color(UIColor.white))
                     .animation(.easeInOut(duration: 0.2))
             }
             .frame(width: 40, height: 40)
@@ -82,18 +82,19 @@ struct TabBarView: View {
                 .gesture(checkTap)
             }
             .frame(width: 64, height: 64)
+            .zIndex(1.0)
             
             Spacer()
                 .frame(width: 16)
             
             ZStack {
                 Circle()
-                    .foregroundColor(Tab.friends.backgroundColor)
+                    .foregroundColor(.background)
                     .shadow(color: .black.opacity(0.15), radius: 2)
                 
                 Image(systemName: "person.2.fill")
                     .font(.headline)
-                    .foregroundColor(modelData.tab == .friends ? Tab.friends.activeForegroundColor : Tab.friends.inactiveForegroundColor)
+                    .foregroundColor(modelData.tab == .friends ? .accentColor : Color(UIColor.white))
             }
             .frame(width: 40, height: 40)
             .animation(.easeInOut(duration: 0.2))

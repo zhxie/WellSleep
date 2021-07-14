@@ -12,7 +12,7 @@ struct AddUserView: View {
         HStack {
             ZStack {
                 Circle()
-                    .foregroundColor(Color(red: 134 / 255, green: 198 / 255, blue: 203 / 255))
+                    .foregroundColor(.background)
                 
                 Image(systemName: "plus")
                     .font(.system(size: 30, weight: .bold))

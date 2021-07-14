@@ -12,7 +12,7 @@ struct ShowCodeView: View {
         HStack {
             ZStack {
                 Circle()
-                    .foregroundColor(Color(red: 245 / 255, green: 229 / 255, blue: 151 / 255))
+                    .foregroundColor(.accentColor)
                 
                 Image(systemName: "qrcode")
                     .font(.system(size: 30, weight: .bold))
