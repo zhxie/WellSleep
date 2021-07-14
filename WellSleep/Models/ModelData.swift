@@ -240,7 +240,9 @@ final class ModelData: ObservableObject {
                 }
                 
                 DispatchQueue.main.async {
-                    self.me = user
+                    withAnimation {
+                        self.me = user
+                    }
                     
                     self.isRegistering = false
                 }
