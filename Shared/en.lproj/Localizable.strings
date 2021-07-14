@@ -6,7 +6,9 @@
   
 */
 
+"wellsleep-prefix" = "Wish you a";
 "wellsleep" = "WellSleep";
+"wellsleep-suffix" = "";
 
 "login" = "Login";
 "register" = "Register";

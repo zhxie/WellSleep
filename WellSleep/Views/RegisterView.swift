@@ -20,10 +20,22 @@ struct RegisterView: View {
             
             Spacer()
             
-            Text("wellsleep")
-                .font(.system(size: 64))
-                .fontWeight(.bold)
-                .foregroundColor(.white)
+            VStack (spacing: 0) {
+                Text("wellsleep-prefix")
+                    .font(.system(size: 36))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Text("wellsleep")
+                    .font(.system(size: 64))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Text("wellsleep-suffix")
+                    .font(.system(size: 36))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
             
             Spacer()
             
