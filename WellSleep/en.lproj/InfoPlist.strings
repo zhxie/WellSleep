@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  WellSleep
+
+  Created by Sketch on 2021/7/14.
+  
+*/
+
+"CFBundleDisplayName" = "WellSleep";
+"NSCameraUsageDescription" = "Scan QR code to add a friend.";

@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  WellSleep
+
+  Created by Sketch on 2021/7/14.
+  
+*/
+
+"CFBundleDisplayName" = "不失眠";
+"NSCameraUsageDescription" = "扫描二维码以添加朋友。";

@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  WellSleep
+
+  Created by Sketch on 2021/7/12.
+  
+*/
+
+"wellsleep-prefix" = "";
+"wellsleep" = "不失眠";
+"wellsleep-suffix" = "になるように";
+
+"login" = "ログイン";
+"register" = "登録";
+
+"add_a_friend" = "友だち追加";
+"show_qr_code" = "QRコード";
+"friends" = "友だち";
