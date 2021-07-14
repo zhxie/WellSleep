@@ -18,8 +18,6 @@ struct RegisterView: View {
         VStack {
             Spacer()
             
-            Spacer()
-            
             VStack (spacing: 0) {
                 Text("wellsleep-prefix")
                     .font(.system(size: 36))
