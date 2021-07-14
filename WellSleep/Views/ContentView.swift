@@ -12,21 +12,27 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            ZStack {
-                HomeView()
-                    .hidden(modelData.tab != .home)
-                UsersView()
-                    .hidden(modelData.tab != .friends)
-            }
-            
-            VStack {
-                Spacer()
-                
-                TabBarView()
-                    .environmentObject(modelData)
-                
-                Spacer()
-                    .frame(height: 24)
+            if modelData.me == nil {
+                RegisterView()
+            } else {
+                ZStack {
+                    ZStack {
+                        HomeView()
+                            .hidden(modelData.tab != .home)
+                        UsersView()
+                            .hidden(modelData.tab != .friends)
+                    }
+                    
+                    VStack {
+                        Spacer()
+                        
+                        TabBarView()
+                            .environmentObject(modelData)
+                        
+                        Spacer()
+                            .frame(height: 24)
+                    }
+                }
             }
         }
     }

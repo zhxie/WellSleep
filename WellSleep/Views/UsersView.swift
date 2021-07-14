@@ -25,7 +25,7 @@ struct UsersView: View {
                     }
                     
                     LazyVStack (spacing: 12) {
-                        UserView(user: modelData.me)
+                        UserView(user: modelData.me!)
                         AddUserView()
                             .onTapGesture {
                                 if !isShowingScanner {
@@ -74,7 +74,7 @@ struct UsersView: View {
             }
             
             if isShowingCode {
-                CodeView(id: modelData.me.id)
+                CodeView(id: modelData.me!.id)
                     .transition(.opacity)
             }
         }

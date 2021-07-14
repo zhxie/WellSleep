@@ -11,18 +11,6 @@ import SwiftUI
 enum Tab {
     case home
     case friends
-    
-    var activeForegroundColor: Color {
-        Color(red: 245 / 255, green: 229 / 255, blue: 151 / 255)
-    }
-    
-    var inactiveForegroundColor: Color {
-        Color(UIColor.white)
-    }
-    
-    var backgroundColor: Color {
-        Color(red: 134 / 255, green: 198 / 255, blue: 203 / 255)
-    }
 }
 
 enum CheckState {
@@ -73,8 +61,9 @@ final class ModelData: ObservableObject {
     @Published var activities: [Activity] = []
     @Published var oldestActivityId: Int = 0
     @Published var users: [User] = []
-    @Published var me = User(id: 992319501, nickname: "")
+    @Published var me: User? = nil
     
+    var isRegistering = false
     var isChecking = false
     var isAddingFriend = false
     var isActivitiesUpdating = false
@@ -87,7 +76,7 @@ final class ModelData: ObservableObject {
         } else {
             isMeUpdating = true
             
-            getUser(id: me.id) { user, error in
+            getUser(id: me!.id) { user, error in
                 guard let user = user else {
                     DispatchQueue.main.async {
                         self.isMeUpdating = false
@@ -111,7 +100,7 @@ final class ModelData: ObservableObject {
         } else {
             isUsersUpdating = true
             
-            getFollowers(id: me.id) { users, error in
+            getFollowers(id: me!.id) { users, error in
                 guard let users = users else {
                     DispatchQueue.main.async {
                         self.isUsersUpdating = false
@@ -140,7 +129,7 @@ final class ModelData: ObservableObject {
                 currentUpdate = activity.time
             }
             
-            getTimeline(id: me.id, to: 0, limit: Limit) { activities, _, error in
+            getTimeline(id: me!.id, to: 0, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
                     DispatchQueue.main.async {
                         self.isActivitiesUpdating = false
@@ -149,7 +138,7 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                getActivities(user: self.me, to: 0, limit: 1) { acts, error2 in
+                getActivities(user: self.me!, to: 0, limit: 1) { acts, error2 in
                     guard let acts = acts else {
                         DispatchQueue.main.async {
                             self.isActivitiesUpdating = false
@@ -191,7 +180,7 @@ final class ModelData: ObservableObject {
         } else {
             isActivitiesUpdating = true
         
-            getTimeline(id: me.id, to: oldestActivityId, limit: Limit) { activities, _, error in
+            getTimeline(id: me!.id, to: oldestActivityId, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
                     DispatchQueue.main.async {
                         self.isActivitiesUpdating = false
@@ -211,6 +200,54 @@ final class ModelData: ObservableObject {
         }
     }
     
+    func register(nickname: String) {
+        if isRegistering {
+            return
+        } else {
+            isRegistering = true
+            
+            postRegister(nickname: nickname) { id, error in
+                guard let id = id else {
+                    DispatchQueue.main.async {
+                        self.isRegistering = false
+                    }
+                    
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.me = User(id: id, nickname: nickname)
+                    
+                    self.isRegistering = false
+                }
+            }
+        }
+    }
+    
+    func login(id: Int) {
+        if isRegistering {
+            return
+        } else {
+            isRegistering = true
+            
+            getUser(id: id) { user, error in
+                guard let user = user else {
+                    DispatchQueue.main.async {
+                        self.isRegistering = false
+                    }
+                    
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.me = user
+                    
+                    self.isRegistering = false
+                }
+            }
+        }
+    }
+    
     func check(type: Activity._Type) {
         if isChecking {
             return
@@ -220,7 +257,7 @@ final class ModelData: ObservableObject {
             let checkState = self.checkState
             self.checkState = .loading
             
-            postCheck(id: me.id, type: type) { success, error in
+            postCheck(id: me!.id, type: type) { success, error in
                 guard success else {
                     DispatchQueue.main.async {
                         self.checkState = checkState
@@ -244,7 +281,7 @@ final class ModelData: ObservableObject {
         } else {
             isAddingFriend = true
             
-            postFollow(id: me.id, followee: id) { success, error in
+            postFollow(id: me!.id, followee: id) { success, error in
                 guard success else {
                     return
                 }
