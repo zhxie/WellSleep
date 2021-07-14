@@ -48,6 +48,7 @@ struct RegisterView: View {
                             Button(action: {
                                 isLogin.toggle()
                                 nickname = ""
+                                UIApplication.shared.endEditing()
                             }, label: {
                                 Text(isLogin ? "register" : "login")
                                     .font(.title2)
