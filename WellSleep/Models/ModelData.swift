@@ -144,6 +144,8 @@ final class ModelData: ObservableObject {
             getTimeline(id: me!.id, to: 0, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
                     DispatchQueue.main.async {
+                        self.lastUpdate = currentUpdate
+                        
                         self.isActivitiesUpdating = false
                     }
                     
@@ -153,6 +155,8 @@ final class ModelData: ObservableObject {
                 getActivities(user: self.me!, to: 0, limit: 1) { acts, error2 in
                     guard let acts = acts else {
                         DispatchQueue.main.async {
+                            self.lastUpdate = currentUpdate
+                            
                             self.isActivitiesUpdating = false
                         }
                         
@@ -202,7 +206,6 @@ final class ModelData: ObservableObject {
                 }
                 
                 DispatchQueue.main.async {
-                    // TODO
                     self.activities.append(contentsOf: activities)
                     self.oldestActivityId = activities.last?.id ?? 0
                     
@@ -268,7 +271,6 @@ final class ModelData: ObservableObject {
                 
                 DispatchQueue.main.async {
                     withAnimation {
-                        // TODO: Code Data
                         self.newMe = User(id: id, nickname: nickname)
                         self.save()
                         

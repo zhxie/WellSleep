@@ -12,7 +12,7 @@ struct WellSleepApp: App {
     @StateObject var modelData = ModelData()
 
     var body: some Scene {
-        modelData.load()
+        // modelData.load()
         
         return WindowGroup {
             ContentView()
