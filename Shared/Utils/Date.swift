@@ -25,6 +25,7 @@ extension Date {
     func formatWeekday() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE"
+        dateFormatter.locale = Locale(identifier: "en-US")
         
         return dateFormatter.string(from: self).uppercased()
     }
