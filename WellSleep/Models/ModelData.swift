@@ -52,6 +52,11 @@ enum CheckState {
     }
 }
 
+struct Configuration: Codable {
+    var lastUpdate: Date
+    var me: User
+}
+
 final class ModelData: ObservableObject {
     static var documentsFolder: URL {
         do {
@@ -90,14 +95,14 @@ final class ModelData: ObservableObject {
             
             getUser(id: me!.id) { user, error in
                 guard let user = user else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         self.isMeUpdating = false
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async(qos: .background) {
                     self.me = user
                     
                     self.isMeUpdating = false
@@ -114,14 +119,14 @@ final class ModelData: ObservableObject {
             
             getFollowers(id: me!.id) { users, error in
                 guard let users = users else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         self.isUsersUpdating = false
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async(qos: .background) {
                     self.users = users
                     
                     self.isUsersUpdating = false
@@ -143,8 +148,9 @@ final class ModelData: ObservableObject {
             
             getTimeline(id: me!.id, to: 0, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         self.lastUpdate = currentUpdate
+                        self.save()
                         
                         self.isActivitiesUpdating = false
                     }
@@ -154,8 +160,9 @@ final class ModelData: ObservableObject {
                 
                 getActivities(user: self.me!, to: 0, limit: 1) { acts, error2 in
                     guard let acts = acts else {
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async(qos: .background) {
                             self.lastUpdate = currentUpdate
+                            self.save()
                             
                             self.isActivitiesUpdating = false
                         }
@@ -175,13 +182,14 @@ final class ModelData: ObservableObject {
                         }
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         if !self.isChecking {
                             self.checkState = nextCheckState
                         }
                         self.lastUpdate = currentUpdate
                         self.activities = activities
                         self.oldestActivityId = activities.last?.id ?? 0
+                        self.save()
                         
                         self.isActivitiesUpdating = false
                     }
@@ -198,14 +206,14 @@ final class ModelData: ObservableObject {
         
             getTimeline(id: me!.id, to: oldestActivityId, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         self.isActivitiesUpdating = false
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async(qos: .background) {
                     self.activities.append(contentsOf: activities)
                     self.oldestActivityId = activities.last?.id ?? 0
                     
@@ -221,23 +229,25 @@ final class ModelData: ObservableObject {
                 return
             }
             
-            guard let me = try? JSONDecoder().decode(User.self, from: data) else {
+            guard let configuration = try? JSONDecoder().decode(Configuration.self, from: data) else {
                 fatalError("Can't decode saved user data.")
             }
             
-            DispatchQueue.main.async {
-                self?.me = me
+            DispatchQueue.main.async(qos: .background) {
+                self?.lastUpdate = configuration.lastUpdate
+                self?.me = configuration.me
             }
         }
     }
     
     func save() {
         DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let newMe = self?.newMe else {
+            guard let me = self?.me else {
                 fatalError("Self out of scope")
             }
             
-            guard let data = try? JSONEncoder().encode(newMe) else {
+            let configuration = Configuration(lastUpdate: Date(timeIntervalSinceNow: 0), me: me)
+            guard let data = try? JSONEncoder().encode(configuration) else {
                 fatalError("Error encoding data")
             }
             
@@ -260,7 +270,7 @@ final class ModelData: ObservableObject {
             
             postRegister(nickname: nickname) { id, error in
                 guard let id = id else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         withAnimation {
                             self.isRegisteringOrLoggingIn = false
                         }
@@ -269,10 +279,9 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async(qos: .background) {
                     withAnimation {
                         self.newMe = User(id: id, nickname: nickname)
-                        self.save()
                         
                         self.isRegisteringOrLoggingIn = false
                     }
@@ -285,6 +294,8 @@ final class ModelData: ObservableObject {
         withAnimation {
             me = newMe
         }
+        
+        self.save()
     }
     
     func login(id: Int) {
@@ -295,7 +306,7 @@ final class ModelData: ObservableObject {
             
             getUser(id: id) { user, error in
                 guard let user = user else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         withAnimation {
                             self.isRegisteringOrLoggingIn = false
                         }
@@ -304,9 +315,8 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async(qos: .background) {
                     withAnimation {
-                        self.newMe = user
                         self.me = user
                         self.save()
                         
@@ -328,14 +338,14 @@ final class ModelData: ObservableObject {
             
             postCheck(id: me!.id, type: type) { success, error in
                 guard success else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async(qos: .background) {
                         self.checkState = checkState
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async(qos: .background) {
                     self.isChecking = false
                     
                     self.updateTimeline()
@@ -355,7 +365,7 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async(qos: .background) {
                     self.isAddingFriend = false
                     
                     self.updateFriends()
