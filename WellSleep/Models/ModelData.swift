@@ -280,7 +280,9 @@ final class ModelData: ObservableObject {
     }
     
     func completeRegistration() {
-        me = newMe
+        withAnimation {
+            me = newMe
+        }
     }
     
     func login(id: Int) {
