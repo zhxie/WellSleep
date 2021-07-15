@@ -16,7 +16,7 @@ struct UserView: View {
                 Circle()
                     .foregroundColor(user.color)
                 
-                Text(String(user.nickname.first ?? " "))
+                Text(String(user.nickname.first?.uppercased() ?? " "))
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
