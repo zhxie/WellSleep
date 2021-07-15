@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ActivityView: View {
+    @EnvironmentObject var modelData: ModelData
+    
     var activity: Activity
-    var lastUpdate: Date
     
     var body: some View {
-        HStack {
+        return HStack {
             ZStack {
                 Circle()
                     .foregroundColor(activity.user.color)
@@ -23,7 +24,7 @@ struct ActivityView: View {
                     .foregroundColor(.white)
                     .lineLimit(1)
                 
-                if lastUpdate < activity.time {
+                if modelData.lastUpdate < activity.time {
                     VStack {
                         HStack {
                             Spacer()
@@ -97,6 +98,9 @@ struct ActivityView: View {
 
 struct ActivityView_Previews: PreviewProvider {
     static var previews: some View {
-        ActivityView(activity: ActivityPlaceholder, lastUpdate: Date(timeIntervalSince1970: 0))
+        let modelData = ModelData()
+        
+        return ActivityView(activity: ActivityPlaceholder)
+            .environmentObject(modelData)
     }
 }

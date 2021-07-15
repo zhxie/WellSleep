@@ -41,7 +41,7 @@ struct HomeView: View {
                         }
                         
                         ForEach (activitiesGroup, id: \.self.id) { activity in
-                            ActivityView(activity: activity, lastUpdate: modelData.lastUpdate)
+                            ActivityView(activity: activity)
                                 .onAppear {
                                     guard activity.id == modelData.oldestActivityId else {
                                         return
