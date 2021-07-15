@@ -39,6 +39,7 @@ struct ActivityView: View {
                 }
             }
             .frame(width: 55.0, height: 55.0)
+            .animation(.easeInOut)
             
             HStack (spacing: 0) {
                 Path { path in
