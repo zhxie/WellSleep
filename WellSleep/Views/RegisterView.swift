@@ -113,7 +113,7 @@ struct RegisterView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                     
-                    Text(String(format: "%d", modelData.newMe!.id))
+                    Text(String(format: "%09d", modelData.newMe!.id))
                         .font(.system(size: 64))
                         .fontWeight(.bold)
                         .foregroundColor(.white)

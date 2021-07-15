@@ -10,9 +10,9 @@ import SwiftUI
 @main
 struct WellSleepApp: App {
     @StateObject var modelData = ModelData()
-    
+
     var body: some Scene {
-        // TODO: Core Data
+        modelData.load()
         
         return WindowGroup {
             ContentView()

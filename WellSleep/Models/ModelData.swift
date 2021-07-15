@@ -53,6 +53,17 @@ enum CheckState {
 }
 
 final class ModelData: ObservableObject {
+    static var documentsFolder: URL {
+        do {
+            return try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        } catch {
+            fatalError("Can't find documents directory.")
+        }
+    }
+    private static var fileURL: URL {
+        return documentsFolder.appendingPathComponent("WellSleep.data")
+    }
+    
     @Published var tab: Tab = .home
     @Published var checkState: CheckState = .sleep
     
@@ -201,6 +212,41 @@ final class ModelData: ObservableObject {
         }
     }
     
+    func load() {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let data = try? Data(contentsOf: Self.fileURL) else {
+                return
+            }
+            
+            guard let me = try? JSONDecoder().decode(User.self, from: data) else {
+                fatalError("Can't decode saved user data.")
+            }
+            
+            DispatchQueue.main.async {
+                self?.me = me
+            }
+        }
+    }
+    
+    func save() {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let newMe = self?.newMe else {
+                fatalError("Self out of scope")
+            }
+            
+            guard let data = try? JSONEncoder().encode(newMe) else {
+                fatalError("Error encoding data")
+            }
+            
+            do {
+                let outfile = Self.fileURL
+                try data.write(to: outfile)
+            } catch {
+                fatalError("Can't write to file")
+            }
+        }
+    }
+    
     func register(nickname: String) {
         if isRegisteringOrLoggingIn {
             return
@@ -224,6 +270,7 @@ final class ModelData: ObservableObject {
                     withAnimation {
                         // TODO: Code Data
                         self.newMe = User(id: id, nickname: nickname)
+                        self.save()
                         
                         self.isRegisteringOrLoggingIn = false
                     }
@@ -255,7 +302,9 @@ final class ModelData: ObservableObject {
                 
                 DispatchQueue.main.async {
                     withAnimation {
+                        self.newMe = user
                         self.me = user
+                        self.save()
                         
                         self.isRegisteringOrLoggingIn = false
                     }
