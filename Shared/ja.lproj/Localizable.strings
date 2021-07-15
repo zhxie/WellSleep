@@ -9,9 +9,13 @@
 "wellsleep-prefix" = "";
 "wellsleep" = "不失眠";
 "wellsleep-suffix" = "になるように";
+"your_id_is" = "あなたのIDは";
 
+"id" = "ID";
+"nickname" = "ニックネーム";
 "login" = "ログイン";
 "register" = "登録";
+"next" = "次ぎ";
 
 "add_a_friend" = "友だち追加";
 "show_qr_code" = "QRコード";

@@ -62,8 +62,9 @@ final class ModelData: ObservableObject {
     @Published var oldestActivityId: Int = 0
     @Published var users: [User] = []
     @Published var me: User? = nil
+    @Published var newMe: User? = nil
     
-    var isRegistering = false
+    @Published var isRegisteringOrLoggingIn = false
     var isChecking = false
     var isAddingFriend = false
     var isActivitiesUpdating = false
@@ -201,39 +202,52 @@ final class ModelData: ObservableObject {
     }
     
     func register(nickname: String) {
-        if isRegistering {
+        if isRegisteringOrLoggingIn {
             return
         } else {
-            isRegistering = true
+            withAnimation {
+                isRegisteringOrLoggingIn = true
+            }
             
             postRegister(nickname: nickname) { id, error in
                 guard let id = id else {
                     DispatchQueue.main.async {
-                        self.isRegistering = false
+                        withAnimation {
+                            self.isRegisteringOrLoggingIn = false
+                        }
                     }
                     
                     return
                 }
                 
                 DispatchQueue.main.async {
-                    self.me = User(id: id, nickname: nickname)
-                    
-                    self.isRegistering = false
+                    withAnimation {
+                        // TODO: Code Data
+                        self.newMe = User(id: id, nickname: nickname)
+                        
+                        self.isRegisteringOrLoggingIn = false
+                    }
                 }
             }
         }
     }
     
+    func completeRegistration() {
+        me = newMe
+    }
+    
     func login(id: Int) {
-        if isRegistering {
+        if isRegisteringOrLoggingIn {
             return
         } else {
-            isRegistering = true
+            isRegisteringOrLoggingIn = true
             
             getUser(id: id) { user, error in
                 guard let user = user else {
                     DispatchQueue.main.async {
-                        self.isRegistering = false
+                        withAnimation {
+                            self.isRegisteringOrLoggingIn = false
+                        }
                     }
                     
                     return
@@ -242,9 +256,9 @@ final class ModelData: ObservableObject {
                 DispatchQueue.main.async {
                     withAnimation {
                         self.me = user
+                        
+                        self.isRegisteringOrLoggingIn = false
                     }
-                    
-                    self.isRegistering = false
                 }
             }
         }

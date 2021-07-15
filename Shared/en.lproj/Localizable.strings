@@ -9,9 +9,13 @@
 "wellsleep-prefix" = "Wish you a";
 "wellsleep" = "WellSleep";
 "wellsleep-suffix" = "";
+"your_id_is" = "Your ID is";
 
+"id" = "ID";
+"nickname" = "Nickname";
 "login" = "Login";
 "register" = "Register";
+"next" = "Next";
 
 "add_a_friend" = "Add a Friend";
 "show_qr_code" = "Show QR Code";

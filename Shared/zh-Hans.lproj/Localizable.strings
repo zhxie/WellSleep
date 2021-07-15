@@ -9,9 +9,13 @@
 "wellsleep-prefix" = "愿你整晚";
 "wellsleep" = "不失眠";
 "wellsleep-suffix" = "";
+"your_id_is" = "您的ID是";
 
+"id" = "ID";
+"nickname" = "昵称";
 "login" = "登录";
 "register" = "注册";
+"next" = "继续";
 
 "add_a_friend" = "添加朋友";
 "show_qr_code" = "我的二维码";

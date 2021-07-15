@@ -12,7 +12,9 @@ struct WellSleepApp: App {
     @StateObject var modelData = ModelData()
     
     var body: some Scene {
-        WindowGroup {
+        // TODO: Core Data
+        
+        return WindowGroup {
             ContentView()
                 .environmentObject(modelData)
         }
