@@ -30,7 +30,7 @@ struct RegisterView: View {
             }
             
             VStack {
-                if modelData.newMe == nil {
+                if modelData.me == nil {
                     if !modelData.isRegisteringOrLoggingIn {
                         Spacer()
                         
@@ -117,6 +117,21 @@ struct RegisterView: View {
                         .padding(.horizontal, 24.0)
                     
                         Spacer()
+                    } else {
+                        VStack {
+                            Spacer()
+                            
+                            HStack {
+                                Spacer()
+                                
+                                ProgressView()
+                                    .scaleEffect(1.5)
+                                
+                                Spacer()
+                            }
+                            
+                            Spacer()
+                        }
                     }
                 } else {
                     Spacer()
@@ -127,7 +142,7 @@ struct RegisterView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                         
-                        Text(String(format: "%09d", modelData.newMe!.id))
+                        Text(String(format: "%09d", modelData.me!.id))
                             .font(.system(size: 48))
                             .fontWeight(.bold)
                             .foregroundColor(.white)

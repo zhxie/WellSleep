@@ -78,14 +78,14 @@ final class ModelData: ObservableObject {
     @Published var oldestActivityId: Int = 0
     @Published var users: [User] = []
     @Published var me: User? = nil
-    @Published var newMe: User? = nil
+    @Published var isWaitingRegisteringComplete = false
     
     @Published var isRegisteringOrLoggingIn = false
     var isChecking = false
     var isAddingFriend = false
-    var isActivitiesUpdating = false
-    var isUsersUpdating = false
-    var isMeUpdating = false
+    @Published var isActivitiesUpdating = false
+    @Published var isUsersUpdating = false
+    @Published var isMeUpdating = false
     
     func updateMe() {
         if isMeUpdating {
@@ -281,7 +281,9 @@ final class ModelData: ObservableObject {
                 
                 DispatchQueue.main.async(qos: .background) {
                     withAnimation {
-                        self.newMe = User(id: id, nickname: nickname)
+                        self.isWaitingRegisteringComplete = true
+                        self.me = User(id: id, nickname: nickname)
+                        self.save()
                         
                         self.isRegisteringOrLoggingIn = false
                     }
@@ -292,17 +294,17 @@ final class ModelData: ObservableObject {
     
     func completeRegistration() {
         withAnimation {
-            me = newMe
+            isWaitingRegisteringComplete = false
         }
-        
-        self.save()
     }
     
     func login(id: Int) {
         if isRegisteringOrLoggingIn {
             return
         } else {
-            isRegisteringOrLoggingIn = true
+            withAnimation {
+                isRegisteringOrLoggingIn = true
+            }
             
             getUser(id: id) { user, error in
                 guard let user = user else {

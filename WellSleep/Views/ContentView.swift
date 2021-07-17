@@ -12,7 +12,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            if modelData.me == nil {
+            if modelData.me == nil || modelData.isWaitingRegisteringComplete {
                 RegisterView()
             } else {
                 ZStack {
