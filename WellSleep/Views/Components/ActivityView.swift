@@ -18,7 +18,7 @@ struct ActivityView: View {
                 Circle()
                     .foregroundColor(activity.user.color)
                 
-                Text(String(activity.user.nickname.first ?? " "))
+                Text(String(activity.user.nickname.first?.uppercased() ?? " "))
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)

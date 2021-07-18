@@ -11,7 +11,7 @@ struct UserView: View {
     var user: User
     
     var body: some View {
-        HStack {
+        HStack (spacing: 12) {
             ZStack {
                 Circle()
                     .foregroundColor(user.color)
@@ -25,7 +25,8 @@ struct UserView: View {
             .frame(width: 55.0, height: 55.0)
             
             Text(user.nickname)
-                .font(.custom("Baloo Thambi Regular", size: 28.0))
+                .font(.title)
+                .fontWeight(.bold)
                 .lineLimit(1)
                 .layoutPriority(1)
             

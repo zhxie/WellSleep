@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ShowCodeView: View {
     var body: some View {
-        HStack {
+        HStack (spacing: 12) {
             ZStack {
                 Circle()
                     .foregroundColor(.accentColor)
@@ -22,7 +22,8 @@ struct ShowCodeView: View {
             .frame(width: 55.0, height: 55.0)
             
             Text("show_qr_code")
-                .font(.custom("Baloo Thambi Regular", size: 28.0))
+                .font(.title)
+                .fontWeight(.bold)
                 .lineLimit(1)
                 .layoutPriority(1)
             

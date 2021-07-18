@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddUserView: View {
     var body: some View {
-        HStack {
+        HStack (spacing: 12) {
             ZStack {
                 Circle()
                     .foregroundColor(.background)
@@ -20,9 +20,10 @@ struct AddUserView: View {
                     .lineLimit(1)
             }
             .frame(width: 55.0, height: 55.0)
-            
+
             Text("add_a_friend")
-                .font(.custom("Baloo Thambi Regular", size: 28.0))
+                .font(.title)
+                .fontWeight(.bold)
                 .lineLimit(1)
                 .layoutPriority(1)
             
