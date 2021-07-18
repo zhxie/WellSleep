@@ -172,7 +172,7 @@ final class ModelData: ObservableObject {
                     DispatchQueue.main.async {
                         withAnimation {
                             self.lastUpdate = currentUpdate
-                            self.save()
+                            self.saveConfiguration()
                             
                             self.isActivitiesUpdating = false
                         }
@@ -186,7 +186,7 @@ final class ModelData: ObservableObject {
                         DispatchQueue.main.async {
                             withAnimation {
                                 self.lastUpdate = currentUpdate
-                                self.save()
+                                self.saveConfiguration()
                                 
                                 self.isActivitiesUpdating = false
                             }
@@ -215,7 +215,7 @@ final class ModelData: ObservableObject {
                             self.lastUpdate = currentUpdate
                             self.activities = activities
                             self.oldestActivityId = activities.last?.id ?? 0
-                            self.save()
+                            self.saveConfiguration()
                             
                             self.isActivitiesUpdating = false
                         }
@@ -253,7 +253,7 @@ final class ModelData: ObservableObject {
         }
     }
     
-    func load() {
+    func loadConfiguration() {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let data = try? Data(contentsOf: Self.fileURL) else {
                 return
@@ -270,7 +270,7 @@ final class ModelData: ObservableObject {
         }
     }
     
-    func save() {
+    func saveConfiguration() {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let me = self?.me else {
                 fatalError("Self out of scope")
@@ -313,7 +313,7 @@ final class ModelData: ObservableObject {
                     withAnimation {
                         self.isWaitingRegisteringComplete = true
                         self.me = User(id: id, nickname: nickname)
-                        self.save()
+                        self.saveConfiguration()
                         
                         self.isRegisteringOrLoggingIn = false
                     }
@@ -350,7 +350,7 @@ final class ModelData: ObservableObject {
                 DispatchQueue.main.async {
                     withAnimation {
                         self.me = user
-                        self.save()
+                        self.saveConfiguration()
                         
                         self.isRegisteringOrLoggingIn = false
                     }
