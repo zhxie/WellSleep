@@ -101,7 +101,27 @@ struct UsersView: View {
             }
         }
         .sheet(isPresented: $isShowingScanner) {
-            CodeScannerView(codeTypes: [.qr], completion: handleScan)
+            ZStack {
+                CodeScannerView(codeTypes: [.qr], completion: handleScan)
+                
+                VStack {
+                    Spacer()
+                    
+                    Spacer()
+                    
+                    Spacer()
+                    
+                    Spacer()
+                    
+                    Text("please_scan_your_friend_s_qr_code")
+                        .fontWeight(.medium)
+                        .foregroundColor(.white.opacity(0.67))
+                        .padding(.horizontal)
+                    
+                    Spacer()
+                }
+            }
+            .ignoresSafeArea(.container)
         }
         .onAppear {
             modelData.updateFriends()

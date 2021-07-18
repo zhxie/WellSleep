@@ -18,5 +18,6 @@
 "next" = "继续";
 
 "add_a_friend" = "添加朋友";
+"please_scan_your_friend_s_qr_code" = "请扫描您的朋友的二维码";
 "show_qr_code" = "我的二维码";
 "friends" = "朋友";
