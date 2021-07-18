@@ -52,6 +52,11 @@ enum CheckState {
     }
 }
 
+enum ActivitiesUpdatingSide {
+    case top
+    case bottom
+}
+
 struct Configuration: Codable {
     var lastUpdate: Date
     var me: User
@@ -84,6 +89,7 @@ final class ModelData: ObservableObject {
     var isChecking = false
     var isAddingFriend = false
     @Published var isActivitiesUpdating = false
+    @Published var activitiesUpdatingSide: ActivitiesUpdatingSide = .top
     @Published var isUsersUpdating = false
     @Published var isMeUpdating = false
     
@@ -91,21 +97,27 @@ final class ModelData: ObservableObject {
         if isMeUpdating {
             return
         } else {
-            isMeUpdating = true
+            withAnimation {
+                isMeUpdating = true
+            }
             
             getUser(id: me!.id) { user, error in
                 guard let user = user else {
-                    DispatchQueue.main.async(qos: .background) {
-                        self.isMeUpdating = false
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            self.isMeUpdating = false
+                        }
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async(qos: .background) {
-                    self.me = user
-                    
-                    self.isMeUpdating = false
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.me = user
+                        
+                        self.isMeUpdating = false
+                    }
                 }
             }
         }
@@ -115,21 +127,27 @@ final class ModelData: ObservableObject {
         if isAddingFriend || isUsersUpdating {
             return
         } else {
-            isUsersUpdating = true
+            withAnimation {
+                isUsersUpdating = true
+            }
             
             getFollowers(id: me!.id) { users, error in
                 guard let users = users else {
-                    DispatchQueue.main.async(qos: .background) {
-                        self.isUsersUpdating = false
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            self.isUsersUpdating = false
+                        }
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async(qos: .background) {
-                    self.users = users
-                    
-                    self.isUsersUpdating = false
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.users = users
+                        
+                        self.isUsersUpdating = false
+                    }
                 }
             }
         }
@@ -139,7 +157,10 @@ final class ModelData: ObservableObject {
         if isChecking || isActivitiesUpdating {
             return
         } else {
-            isActivitiesUpdating = true
+            withAnimation {
+                activitiesUpdatingSide = .top
+                isActivitiesUpdating = true
+            }
             
             var currentUpdate = lastUpdate
             if let activity = activities.first {
@@ -148,11 +169,13 @@ final class ModelData: ObservableObject {
             
             getTimeline(id: me!.id, to: 0, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
-                    DispatchQueue.main.async(qos: .background) {
-                        self.lastUpdate = currentUpdate
-                        self.save()
-                        
-                        self.isActivitiesUpdating = false
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            self.lastUpdate = currentUpdate
+                            self.save()
+                            
+                            self.isActivitiesUpdating = false
+                        }
                     }
                     
                     return
@@ -160,11 +183,13 @@ final class ModelData: ObservableObject {
                 
                 getActivities(user: self.me!, to: 0, limit: 1) { acts, error2 in
                     guard let acts = acts else {
-                        DispatchQueue.main.async(qos: .background) {
-                            self.lastUpdate = currentUpdate
-                            self.save()
-                            
-                            self.isActivitiesUpdating = false
+                        DispatchQueue.main.async {
+                            withAnimation {
+                                self.lastUpdate = currentUpdate
+                                self.save()
+                                
+                                self.isActivitiesUpdating = false
+                            }
                         }
                         
                         return
@@ -182,16 +207,18 @@ final class ModelData: ObservableObject {
                         }
                     }
                     
-                    DispatchQueue.main.async(qos: .background) {
-                        if !self.isChecking {
-                            self.checkState = nextCheckState
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            if !self.isChecking {
+                                self.checkState = nextCheckState
+                            }
+                            self.lastUpdate = currentUpdate
+                            self.activities = activities
+                            self.oldestActivityId = activities.last?.id ?? 0
+                            self.save()
+                            
+                            self.isActivitiesUpdating = false
                         }
-                        self.lastUpdate = currentUpdate
-                        self.activities = activities
-                        self.oldestActivityId = activities.last?.id ?? 0
-                        self.save()
-                        
-                        self.isActivitiesUpdating = false
                     }
                 }
             }
@@ -202,18 +229,21 @@ final class ModelData: ObservableObject {
         if isChecking || isActivitiesUpdating {
             return
         } else {
-            isActivitiesUpdating = true
+            withAnimation {
+                activitiesUpdatingSide = .bottom
+                isActivitiesUpdating = true
+            }
         
             getTimeline(id: me!.id, to: oldestActivityId, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
-                    DispatchQueue.main.async(qos: .background) {
+                    DispatchQueue.main.async {
                         self.isActivitiesUpdating = false
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async(qos: .background) {
+                DispatchQueue.main.async {
                     self.activities.append(contentsOf: activities)
                     self.oldestActivityId = activities.last?.id ?? 0
                     
@@ -233,7 +263,7 @@ final class ModelData: ObservableObject {
                 fatalError("Can't decode saved user data.")
             }
             
-            DispatchQueue.main.async(qos: .background) {
+            DispatchQueue.main.async {
                 self?.lastUpdate = configuration.lastUpdate
                 self?.me = configuration.me
             }
@@ -270,7 +300,7 @@ final class ModelData: ObservableObject {
             
             postRegister(nickname: nickname) { id, error in
                 guard let id = id else {
-                    DispatchQueue.main.async(qos: .background) {
+                    DispatchQueue.main.async {
                         withAnimation {
                             self.isRegisteringOrLoggingIn = false
                         }
@@ -279,7 +309,7 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                DispatchQueue.main.async(qos: .background) {
+                DispatchQueue.main.async {
                     withAnimation {
                         self.isWaitingRegisteringComplete = true
                         self.me = User(id: id, nickname: nickname)
@@ -308,7 +338,7 @@ final class ModelData: ObservableObject {
             
             getUser(id: id) { user, error in
                 guard let user = user else {
-                    DispatchQueue.main.async(qos: .background) {
+                    DispatchQueue.main.async {
                         withAnimation {
                             self.isRegisteringOrLoggingIn = false
                         }
@@ -317,7 +347,7 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                DispatchQueue.main.async(qos: .background) {
+                DispatchQueue.main.async {
                     withAnimation {
                         self.me = user
                         self.save()
@@ -340,14 +370,14 @@ final class ModelData: ObservableObject {
             
             postCheck(id: me!.id, type: type) { success, error in
                 guard success else {
-                    DispatchQueue.main.async(qos: .background) {
+                    DispatchQueue.main.async {
                         self.checkState = checkState
                     }
                     
                     return
                 }
                 
-                DispatchQueue.main.async(qos: .background) {
+                DispatchQueue.main.async {
                     self.isChecking = false
                     
                     self.updateTimeline()
@@ -367,7 +397,7 @@ final class ModelData: ObservableObject {
                     return
                 }
                 
-                DispatchQueue.main.async(qos: .background) {
+                DispatchQueue.main.async {
                     self.isAddingFriend = false
                     
                     self.updateFriends()

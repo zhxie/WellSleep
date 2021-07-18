@@ -20,11 +20,18 @@ struct HomeView: View {
                     Spacer()
                 }
                 
-                if modelData.isActivitiesUpdating {
-                    ProgressView()
-                }
-                
                 LazyVStack (alignment: .leading, spacing: 12) {
+                    if modelData.isActivitiesUpdating && modelData.activitiesUpdatingSide == .top {
+                        HStack {
+                            Spacer()
+                            
+                            ProgressView()
+                                .scaleEffect(1.5)
+                            
+                            Spacer()
+                        }
+                    }
+                    
                     ForEach (groupedActivities, id: \.self.first!.id) { activitiesGroup in
                         if activitiesGroup.first!.time.formatFullDate() != Date().formatFullDate() {
                             HStack {
@@ -53,6 +60,17 @@ struct HomeView: View {
                                     
                                     modelData.appendTimeline()
                                 }
+                        }
+                    }
+                    
+                    if modelData.isActivitiesUpdating && modelData.activitiesUpdatingSide == .bottom {
+                        HStack {
+                            Spacer()
+                            
+                            ProgressView()
+                                .scaleEffect(1.5)
+                            
+                            Spacer()
                         }
                     }
                 }

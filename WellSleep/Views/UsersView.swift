@@ -25,6 +25,16 @@ struct UsersView: View {
                     }
                     
                     LazyVStack (spacing: 12) {
+                        if modelData.isMeUpdating {
+                            HStack {
+                                Spacer()
+                                
+                                ProgressView()
+                                
+                                Spacer()
+                            }
+                        }
+                        
                         UserView(user: modelData.me!)
                         AddUserView()
                             .onTapGesture {
@@ -63,6 +73,17 @@ struct UsersView: View {
                                 .foregroundColor(Color(UIColor.secondarySystemFill))
                         }
                         .padding(.vertical, 4)
+                        
+                        if modelData.isUsersUpdating {
+                            HStack {
+                                Spacer()
+                                
+                                ProgressView()
+                                    .scaleEffect(1.5)
+                                
+                                Spacer()
+                            }
+                        }
                         
                         ForEach (modelData.users, id: \.self.id) { user in
                             UserView(user: user)
