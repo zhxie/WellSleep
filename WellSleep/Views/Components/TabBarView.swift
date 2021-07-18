@@ -46,6 +46,7 @@ struct TabBarView: View {
             .animation(.easeInOut(duration: 0.2))
             .onTapGesture {
                 Impact(style: .light)
+                modelData.updateTimeline()
                 modelData.tab = .home
             }
             
@@ -100,6 +101,8 @@ struct TabBarView: View {
             .animation(.easeInOut(duration: 0.2))
             .onTapGesture {
                 Impact(style: .light)
+                modelData.updateMe()
+                modelData.updateFriends()
                 modelData.tab = .friends
             }
         }
