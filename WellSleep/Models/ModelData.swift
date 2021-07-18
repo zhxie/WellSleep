@@ -75,7 +75,7 @@ final class ModelData: ObservableObject {
     }
     
     @Published var tab: Tab = .home
-    @Published var checkState: CheckState = .sleep
+    @Published var checkState: CheckState = .loading
     
     @Published var lastUpdate = Date(timeIntervalSince1970: 0)
     
