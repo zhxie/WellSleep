@@ -30,6 +30,7 @@ struct UsersView: View {
                                 Spacer()
                                 
                                 ProgressView()
+                                    .scaleEffect(1.5)
                                 
                                 Spacer()
                             }
