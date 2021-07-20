@@ -372,6 +372,16 @@ final class ModelData: ObservableObject {
             SwiftLocation.gpsLocation(accuracy: .city).then { result in
                 if let location = result.location {
                     getWeather(lat: location.coordinate.latitude, lon: location.coordinate.longitude) { weather, error in
+                        guard let weather = weather else {
+                            DispatchQueue.main.async {
+                                self.checkState = checkState
+                                
+                                self.isChecking = false
+                            }
+                            
+                            return
+                        }
+                        
                         self.completeChecking(checkState: checkState, type: type, weather: weather)
                     }
                 } else {
@@ -387,6 +397,8 @@ final class ModelData: ObservableObject {
             guard success else {
                 DispatchQueue.main.async {
                     self.checkState = checkState
+                    
+                    self.isChecking = false
                 }
                 
                 return
