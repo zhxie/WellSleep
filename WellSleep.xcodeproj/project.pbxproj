@@ -35,6 +35,7 @@
 		E4453499269F39AD0027C145 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E445349B269F39AD0027C145 /* InfoPlist.strings */; };
 		E4571B762680CE2400496F21 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4571B752680CE2400496F21 /* Date.swift */; };
 		E45C0DDF269CA64100974974 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = E45C0DDE269CA64100974974 /* CodeScanner */; };
+		E48175F826A7027900A9908A /* SwiftLocation in Frameworks */ = {isa = PBXBuildFile; productRef = E48175F726A7027900A9908A /* SwiftLocation */; };
 		E49C34C62693447100CA21BC /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49C34C52693447100CA21BC /* TabBarView.swift */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E45C0DDF269CA64100974974 /* CodeScanner in Frameworks */,
+				E48175F826A7027900A9908A /* SwiftLocation in Frameworks */,
 				E43747B72680B86400F7AFCD /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,6 +233,7 @@
 			packageProductDependencies = (
 				E43747B62680B86400F7AFCD /* SwiftyJSON */,
 				E45C0DDE269CA64100974974 /* CodeScanner */,
+				E48175F726A7027900A9908A /* SwiftLocation */,
 			);
 			productName = "WellSleep (iOS)";
 			productReference = E43747982680B6F700F7AFCD /* WellSleep.app */;
@@ -264,6 +267,7 @@
 			packageReferences = (
 				E43747B52680B86400F7AFCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				E45C0DDA269CA20100974974 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+				E48175F626A7027900A9908A /* XCRemoteSwiftPackageReference "SwiftLocation" */,
 			);
 			productRefGroup = E43747992680B6F700F7AFCD /* Products */;
 			projectDirPath = "";
@@ -547,6 +551,14 @@
 				kind = branch;
 			};
 		};
+		E48175F626A7027900A9908A /* XCRemoteSwiftPackageReference "SwiftLocation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/malcommac/SwiftLocation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -559,6 +571,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E45C0DDA269CA20100974974 /* XCRemoteSwiftPackageReference "CodeScanner" */;
 			productName = CodeScanner;
+		};
+		E48175F726A7027900A9908A /* SwiftLocation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E48175F626A7027900A9908A /* XCRemoteSwiftPackageReference "SwiftLocation" */;
+			productName = SwiftLocation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

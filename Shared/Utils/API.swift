@@ -91,15 +91,18 @@ func postUpdateProfile(id: Int, nickname: String, completion: @escaping (Bool, E
     }
 }
 
-func postCheck(id: Int, type: Activity._Type, completion: @escaping (Bool, Error?) -> Void) {
+func postCheck(id: Int, type: Activity._Type, weather: Activity.Weather?, completion: @escaping (Bool, Error?) -> Void) {
     do {
         var request = URLRequest(url: URL(string: WellSleepCheckURL)!)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let parameters: [String: Any] = [
+        var parameters: [String: Any] = [
             "id": id,
             "type": type.rawValue
         ]
+        if let weather = weather {
+            parameters["weather"] = weather.rawValue
+        }
         request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -407,6 +410,44 @@ func parseActivity(activity: JSON, user: User) -> Activity {
     let id = activity["id"].intValue
     let type = Activity._Type(rawValue: activity["type"].intValue)!
     let time = Date(timeIntervalSince1970: activity["time"].doubleValue / 1000)
+    let weather = Activity.Weather(rawValue: activity["weather"].int ?? -1) ?? nil
     
-    return Activity(id: id, type: type, user: user, time: time, weather: nil)
+    return Activity(id: id, type: type, user: user, time: time, weather: weather)
+}
+
+func getWeather(lat: Double, lon: Double, completion: @escaping (Activity.Weather?, Error?) -> Void) {
+    do {
+        var request = URLRequest(url: URL(string: String(format: WeatherComURL, lat, lon))!)
+        request.timeoutInterval = Timeout
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                completion(nil, error)
+            } else {
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                guard (200...299).contains(status) else {
+                    completion(nil, error)
+                    
+                    return
+                }
+                
+                if let json = try? JSON(data: data!) {
+                    let status = json["status"].intValue
+                    guard status >= 0 else {
+                        completion(nil, error)
+                        
+                        return
+                    }
+                    
+                    let weather = Activity.Weather(rawValue: json["weather"].intValue)!
+                    
+                    completion(weather, error)
+                } else {
+                    completion(nil, error)
+                }
+            }
+        }
+        .resume()
+    }
 }

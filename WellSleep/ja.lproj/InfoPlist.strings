@@ -8,3 +8,4 @@
 
 "CFBundleDisplayName" = "不失眠";
 "NSCameraUsageDescription" = "QRコードをスキャンして友達を追加します。";
+"NSLocationWhenInUseUsageDescription" = "現在地の天気を取得し、タイムラインに公開します。";

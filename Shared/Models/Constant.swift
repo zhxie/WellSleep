@@ -18,8 +18,11 @@ let WellSleepActivitiesURL = WellSleepURL + "/activities?id=%d&to=%d&limit=%d"
 let WellSleepFollowersURL = WellSleepURL + "/followers?id=%d"
 let WellSleepTimelineURL = WellSleepURL + "/timeline?id=%d&to=%d&limit=%d"
 
+let WeatherComURL = "http://sketch.name.:9324/?lat=%f&lon=%f"
+
 let Timeout = 60.0
 let Limit = 100
+let LocationTimeout = 1.0
 
 let ActivityPlaceholder = Activity(id: 0, type: .sleep, user: User(id: 0, nickname: ""), time: Date(timeIntervalSinceNow: 0), weather: nil)
 let UserPlaceholder = User(id: 0, nickname: "")

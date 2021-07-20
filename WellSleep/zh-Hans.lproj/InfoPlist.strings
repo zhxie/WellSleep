@@ -8,3 +8,4 @@
 
 "CFBundleDisplayName" = "不失眠";
 "NSCameraUsageDescription" = "扫描二维码以添加朋友。";
+"NSLocationWhenInUseUsageDescription" = "获取当前位置的天气并发布到时间线中。";

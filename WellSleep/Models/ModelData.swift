@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftLocation
 
 enum Tab {
     case home
@@ -368,20 +369,33 @@ final class ModelData: ObservableObject {
             let checkState = self.checkState
             self.checkState = .loading
             
-            postCheck(id: me!.id, type: type) { success, error in
-                guard success else {
-                    DispatchQueue.main.async {
-                        self.checkState = checkState
+            SwiftLocation.gpsLocation(accuracy: .city).then { result in
+                if let location = result.location {
+                    getWeather(lat: location.coordinate.latitude, lon: location.coordinate.longitude) { weather, error in
+                        self.completeChecking(checkState: checkState, type: type, weather: weather)
                     }
-                    
-                    return
+                } else {
+                    self.completeChecking(checkState: checkState, type: type, weather: nil)
+                }
+            }
+            
+        }
+    }
+    
+    func completeChecking(checkState: CheckState, type: Activity._Type, weather: Activity.Weather?) {
+        postCheck(id: me!.id, type: type, weather: weather) { success, error in
+            guard success else {
+                DispatchQueue.main.async {
+                    self.checkState = checkState
                 }
                 
-                DispatchQueue.main.async {
-                    self.isChecking = false
-                    
-                    self.updateTimeline()
-                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.isChecking = false
+                
+                self.updateTimeline()
             }
         }
     }

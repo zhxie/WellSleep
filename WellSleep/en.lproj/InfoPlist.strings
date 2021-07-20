@@ -8,3 +8,4 @@
 
 "CFBundleDisplayName" = "WellSleep";
 "NSCameraUsageDescription" = "Scan QR code to add a friend.";
+"NSLocationWhenInUseUsageDescription" = "Get the weather at the current location and publish it to the timeline.";

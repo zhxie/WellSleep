@@ -41,17 +41,20 @@ struct Activity : Hashable, Codable {
     var weather: Weather?
     enum Weather : Int, CaseIterable, Codable {
         case clear = 0
-        case partly = 1
-        case cloudy = 2
-        case rainy = 3
-        case snowy = 4
+        case partlyCloudy = 1
+        case mostlyCloudy = 2
+        case cloudy = 3
+        case rainy = 4
+        case snowy = 5
         
         var description: LocalizedStringKey {
             switch self {
             case .clear:
                 return "clear"
-            case .partly:
+            case .partlyCloudy:
                 return "partly_cloudy"
+            case .mostlyCloudy:
+                return "mostly_cloudy"
             case .cloudy:
                 return "cloudy"
             case .rainy:
@@ -65,7 +68,7 @@ struct Activity : Hashable, Codable {
             switch self {
             case .clear:
                 return Color(red: 151 / 255, green: 206 / 255, blue: 245 / 255)
-            case .partly:
+            case .partlyCloudy, .mostlyCloudy:
                 return Color(red: 161 / 255, green: 222 / 255, blue: 230 / 255)
             case .cloudy:
                 return Color(red: 197 / 255, green: 220 / 255, blue: 221 / 255)
@@ -78,7 +81,7 @@ struct Activity : Hashable, Codable {
             switch self {
             case .clear:
                 return Color(red: 87 / 255, green: 109 / 255, blue: 142 / 255)
-            case .partly, .snowy:
+            case .partlyCloudy, .mostlyCloudy, .snowy:
                 return Color(red: 76 / 255, green: 91 / 255, blue: 119 / 255)
             case .cloudy:
                 return Color(red: 73 / 255, green: 85 / 255, blue: 102 / 255)
