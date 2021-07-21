@@ -27,6 +27,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan QR code to add a friend.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Get the weather at the current location and publish it to the timeline.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BalooThambiTamil-Regular.ttf</string>
@@ -38,10 +42,6 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Scan QR code to add a friend.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Get the weather at the current location and publish it to the timeline.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiredDeviceCapabilities</key>
