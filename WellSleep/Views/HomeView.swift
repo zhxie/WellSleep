@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var modelData: ModelData
     
+    @Binding var user: User?
+    
     var body: some View {
         ScrollView (showsIndicators: false) {
             ZStack {
@@ -21,7 +23,7 @@ struct HomeView: View {
                 }
                 
                 LazyVStack (alignment: .leading, spacing: 12) {
-                    if modelData.isActivitiesUpdating && modelData.activitiesUpdatingSide == .top {
+                    if modelData.isTimelineUpdating && modelData.timelineUpdatingSide == .top {
                         HStack {
                             Spacer()
                             
@@ -52,7 +54,10 @@ struct HomeView: View {
                         }
                         
                         ForEach (activitiesGroup, id: \.self.id) { activity in
-                            ActivityView(activity: activity)
+                            ActivityView(activity: activity, onTap: {
+                                Impact(style: .light)
+                                user = activity.user
+                            })
                                 .onAppear {
                                     guard activity.id == modelData.oldestActivityId else {
                                         return
@@ -63,7 +68,7 @@ struct HomeView: View {
                         }
                     }
                     
-                    if modelData.isActivitiesUpdating && modelData.activitiesUpdatingSide == .bottom {
+                    if modelData.isTimelineUpdating && modelData.timelineUpdatingSide == .bottom {
                         HStack {
                             Spacer()
                             
@@ -89,7 +94,7 @@ struct HomeView: View {
         var activities: [Activity] = []
         var date = "0/0"
         
-        for activity in modelData.activities.sorted(by: { x, y in
+        for activity in modelData.timeline.sorted(by: { x, y in
             x.time > y.time
         }) {
             let currentDate = activity.time.formatDate()
@@ -116,7 +121,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         let modelData = ModelData()
         
-        return HomeView()
+        return HomeView(user: .constant(nil))
             .environmentObject(modelData)
     }
 }

@@ -12,6 +12,7 @@ struct UsersView: View {
     @EnvironmentObject var modelData: ModelData
     @State var isShowingScanner = false
     @State var isShowingCode = false
+    @Binding var user: User?
     
     var body: some View {
         ZStack {
@@ -88,6 +89,10 @@ struct UsersView: View {
                         
                         ForEach (modelData.users, id: \.self.id) { user in
                             UserView(user: user)
+                                .onTapGesture {
+                                    Impact(style: .light)
+                                    self.user = user
+                                }
                         }
                     }
                     .padding(.horizontal, 24)
@@ -146,7 +151,7 @@ struct UsersView_Previews: PreviewProvider {
     static var previews: some View {
         let modelData = ModelData()
         
-        return UsersView()
+        return UsersView(user: .constant(nil))
             .environmentObject(modelData)
     }
 }

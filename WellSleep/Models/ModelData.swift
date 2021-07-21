@@ -53,7 +53,7 @@ enum CheckState {
     }
 }
 
-enum ActivitiesUpdatingSide {
+enum TimelineUpdatingSide {
     case top
     case bottom
 }
@@ -80,7 +80,7 @@ final class ModelData: ObservableObject {
     
     @Published var lastUpdate = Date(timeIntervalSince1970: 0)
     
-    @Published var activities: [Activity] = []
+    @Published var timeline: [Activity] = []
     @Published var oldestActivityId: Int = 0
     @Published var users: [User] = []
     @Published var me: User? = nil
@@ -89,8 +89,8 @@ final class ModelData: ObservableObject {
     @Published var isRegisteringOrLoggingIn = false
     var isChecking = false
     var isAddingFriend = false
-    @Published var isActivitiesUpdating = false
-    @Published var activitiesUpdatingSide: ActivitiesUpdatingSide = .top
+    @Published var isTimelineUpdating = false
+    @Published var timelineUpdatingSide: TimelineUpdatingSide = .top
     @Published var isUsersUpdating = false
     @Published var isMeUpdating = false
     
@@ -155,16 +155,16 @@ final class ModelData: ObservableObject {
     }
     
     func updateTimeline() {
-        if isChecking || isActivitiesUpdating {
+        if isChecking || isTimelineUpdating {
             return
         } else {
             withAnimation {
-                activitiesUpdatingSide = .top
-                isActivitiesUpdating = true
+                timelineUpdatingSide = .top
+                isTimelineUpdating = true
             }
             
             var currentUpdate = lastUpdate
-            if let activity = activities.first {
+            if let activity = timeline.first {
                 currentUpdate = activity.time
             }
             
@@ -175,7 +175,7 @@ final class ModelData: ObservableObject {
                             self.lastUpdate = currentUpdate
                             self.saveConfiguration()
                             
-                            self.isActivitiesUpdating = false
+                            self.isTimelineUpdating = false
                         }
                     }
                     
@@ -189,7 +189,7 @@ final class ModelData: ObservableObject {
                                 self.lastUpdate = currentUpdate
                                 self.saveConfiguration()
                                 
-                                self.isActivitiesUpdating = false
+                                self.isTimelineUpdating = false
                             }
                         }
                         
@@ -214,11 +214,11 @@ final class ModelData: ObservableObject {
                                 self.checkState = nextCheckState
                             }
                             self.lastUpdate = currentUpdate
-                            self.activities = activities
+                            self.timeline = activities
                             self.oldestActivityId = activities.last?.id ?? 0
                             self.saveConfiguration()
                             
-                            self.isActivitiesUpdating = false
+                            self.isTimelineUpdating = false
                         }
                     }
                 }
@@ -227,28 +227,28 @@ final class ModelData: ObservableObject {
     }
     
     func appendTimeline() {
-        if isChecking || isActivitiesUpdating {
+        if isChecking || isTimelineUpdating {
             return
         } else {
             withAnimation {
-                activitiesUpdatingSide = .bottom
-                isActivitiesUpdating = true
+                timelineUpdatingSide = .bottom
+                isTimelineUpdating = true
             }
         
             getTimeline(id: me!.id, to: oldestActivityId, limit: Limit) { activities, _, error in
                 guard let activities = activities else {
                     DispatchQueue.main.async {
-                        self.isActivitiesUpdating = false
+                        self.isTimelineUpdating = false
                     }
                     
                     return
                 }
                 
                 DispatchQueue.main.async {
-                    self.activities.append(contentsOf: activities)
+                    self.timeline.append(contentsOf: activities)
                     self.oldestActivityId = activities.last?.id ?? 0
                     
-                    self.isActivitiesUpdating = false
+                    self.isTimelineUpdating = false
                 }
             }
         }

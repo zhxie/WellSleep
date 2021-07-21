@@ -11,6 +11,7 @@ struct ActivityView: View {
     @EnvironmentObject var modelData: ModelData
     
     var activity: Activity
+    var onTap: () -> Void = {}
     
     var body: some View {
         return HStack {
@@ -40,6 +41,9 @@ struct ActivityView: View {
             }
             .frame(width: 55.0, height: 55.0)
             .animation(.easeInOut)
+            .onTapGesture {
+                onTap()
+            }
             
             HStack (spacing: 0) {
                 Path { path in

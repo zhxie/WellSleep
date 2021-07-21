@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var modelData: ModelData
+    @State var user: User?
     
     var body: some View {
         ZStack {
@@ -17,9 +18,9 @@ struct ContentView: View {
             } else {
                 ZStack {
                     ZStack {
-                        HomeView()
+                        HomeView(user: $user)
                             .hidden(modelData.tab != .home)
-                        UsersView()
+                        UsersView(user: $user)
                             .hidden(modelData.tab != .friends)
                     }
                     
@@ -34,6 +35,13 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+        .sheet(item: $user) {
+            user = nil
+        } content: { user in
+            ActivitiesView(user: user)
+                .padding(.horizontal)
+                .ignoresSafeArea(.container)
         }
     }
 }

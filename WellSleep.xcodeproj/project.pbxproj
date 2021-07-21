@@ -36,6 +36,7 @@
 		E4571B762680CE2400496F21 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4571B752680CE2400496F21 /* Date.swift */; };
 		E45C0DDF269CA64100974974 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = E45C0DDE269CA64100974974 /* CodeScanner */; };
 		E48175F826A7027900A9908A /* SwiftLocation in Frameworks */ = {isa = PBXBuildFile; productRef = E48175F726A7027900A9908A /* SwiftLocation */; };
+		E48175FA26A8652100A9908A /* ActivitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48175F926A8652100A9908A /* ActivitiesView.swift */; };
 		E49C34C62693447100CA21BC /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49C34C52693447100CA21BC /* TabBarView.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +74,7 @@
 		E445349C269F39B00027C145 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E445349D269F39B00027C145 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4571B752680CE2400496F21 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		E48175F926A8652100A9908A /* ActivitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitiesView.swift; sourceTree = "<group>"; };
 		E49C34C52693447100CA21BC /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,8 +164,9 @@
 			isa = PBXGroup;
 			children = (
 				E445348A269DF2F00027C145 /* Components */,
-				E4340141268F679B00ABD171 /* HomeView.swift */,
+				E48175F926A8652100A9908A /* ActivitiesView.swift */,
 				E410EFDA269B5963009426D7 /* UsersView.swift */,
+				E4340141268F679B00ABD171 /* HomeView.swift */,
 				E445348B269DF3290027C145 /* RegisterView.swift */,
 				E43747922680B6F600F7AFCD /* ContentView.swift */,
 			);
@@ -312,6 +315,7 @@
 				E410EFD52698B7AF009426D7 /* Shape.swift in Sources */,
 				E4571B762680CE2400496F21 /* Date.swift in Sources */,
 				E4453490269DFE7C0027C145 /* Color.swift in Sources */,
+				E48175FA26A8652100A9908A /* ActivitiesView.swift in Sources */,
 				E4453489269DD2B80027C145 /* View.swift in Sources */,
 				E42A53B32680CB1B00B1E13D /* ModelData.swift in Sources */,
 				E42A53AF2680C50D00B1E13D /* Activity.swift in Sources */,
