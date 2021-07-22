@@ -56,7 +56,17 @@ struct ActivityView: View {
                 HStack (alignment: .center) {
                     GeometryReader { g in
                         ZStack (alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 15.0)
+                            Rectangle()
+                            
+                            if let image = activity.image {
+                                HStack {
+                                    Spacer()
+                                    
+                                    Image(image)
+                                        .resizable()
+                                        .scaledToFit()
+                                }
+                            }
                             
                             HStack (alignment: .center) {
                                 Spacer()
@@ -92,6 +102,7 @@ struct ActivityView: View {
                             }
                             .frame(width: g.size.width * 0.6, height: g.size.height)
                         }
+                        .cornerRadius(15.0)
                     }
                 }
                 .frame(height: 55.0)

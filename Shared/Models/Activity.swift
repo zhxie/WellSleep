@@ -64,6 +64,21 @@ struct Activity : Hashable, Codable {
             }
         }
         
+        var image: String {
+            switch self {
+            case .clear:
+                return "clear"
+            case .partlyCloudy, .mostlyCloudy:
+                return "partly_cloudy"
+            case .cloudy:
+                return "cloudy"
+            case .rainy:
+                return "rainy"
+            case .snowy:
+                return "snowy"
+            }
+        }
+        
         var lightColor: Color {
             switch self {
             case .clear:
@@ -88,6 +103,19 @@ struct Activity : Hashable, Codable {
             case .rainy:
                 return Color(red: 51 / 255, green: 65 / 255, blue: 82 / 255)
             }
+        }
+    }
+    
+    var image: String? {
+        if let weather = weather {
+            switch type {
+            case .sleep:
+                return String(format: "%@_%@", "night", weather.image)
+            case .wake:
+                return String(format: "%@_%@", "day", weather.image)
+            }
+        } else {
+            return nil
         }
     }
     
